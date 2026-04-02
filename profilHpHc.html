@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Heures Creuses - Papernest</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* --- CSS : Design Papernest --- */
+        :root {
+            --papernest-blue: #5A52FF;
+            --papernest-blue-light: #EEEDFF;
+            --papernest-blue-hover: #4A42E5;
+            --text-main: #1A1A1A;
+            --text-muted: #6B7280;
+            --border-color: #E5E7EB;
+            --bg-main: #FFFFFF;
+            --bg-body: #F9FAFB;
+        }
+
+        /* Intégration Iframe */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: transparent; 
+            color: var(--text-main);
+            margin: 0;
+            padding: 10px; 
+        }
+
+        .container {
+            width: 100%;
+            max-width: 700px;
+            background-color: var(--bg-main);
+            padding: 50px;
+            border-radius: 16px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+            position: relative;
+            box-sizing: border-box;
+            margin: 0 auto; 
+        }
+
+        /* Barre de progression */
+        .progress-bar-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 6px;
+            background-color: var(--papernest-blue-light);
+            border-top-left-radius: 16px;
+            border-top-right-radius: 16px;
+            overflow: hidden;
+            display: none; /* Masquée sur l'écran d'accueil */
+        }
+
+        .progress-bar {
+            height: 100%;
+            background-color: var(--papernest-blue);
+            width: 0%; 
+            transition: width 0.4s ease-out;
+        }
+
+        /* Gestion de l'affichage */
+        .step {
+            display: none;
+            animation: fadeIn 0.4s ease-out;
+        }
+        .step.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Textes et questions */
+        .question-title {
+            font-size: 24px;
+            font-weight: 600;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            line-height: 1.3;
+        }
+
+        .q-number {
+            color: var(--papernest-blue);
+            font-size: 16px;
+            font-weight: 700;
+            margin-right: 12px;
+            flex-shrink: 0;
+        }
+
+        .question-desc {
+            color: var(--text-muted);
+            font-size: 15px;
+            margin-left: 25px;
+            margin-top: 8px;
+            margin-bottom: 10px;
+        }
+
+        /* Grilles et choix multiples */
+        .choices-container {
+            margin-left: 25px;
+            margin-top: 24px;
+            display: grid;
+            gap: 12px;
+        }
+        .grid-1 { grid-template-columns: 1fr; max-width: 450px; }
+
+        .choice-btn {
+            background-color: var(--bg-main);
+            border: 2px solid var(--border-color);
+            border-radius: 12px;
+            padding: 14px 16px;
+            font-size: 16px;
+            font-weight: 500;
+            color: var(--text-main);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            transition: all 0.2s ease;
+            text-align: left;
+            font-family: inherit;
+        }
+        .choice-btn:hover { 
+            border-color: var(--papernest-blue);
+            background-color: var(--papernest-blue-light);
+        }
+        .choice-btn.selected {
+            background-color: var(--papernest-blue-light);
+            border-color: var(--papernest-blue);
+            color: var(--papernest-blue);
+        }
+
+        .choice-letter {
+            background-color: var(--border-color);
+            color: var(--text-muted);
+            font-size: 12px;
+            font-weight: 700;
+            width: 24px;
+            height: 24px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 6px;
+            margin-right: 12px;
+            flex-shrink: 0;
+            transition: all 0.2s ease;
+        }
+        .choice-btn:hover .choice-letter {
+            background-color: white;
+            color: var(--papernest-blue);
+        }
+        .choice-btn.selected .choice-letter {
+            background-color: var(--papernest-blue);
+            color: white;
+            border-color: var(--papernest-blue);
+        }
+
+        /* Ligne d'actions */
+        .actions-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 30px;
+            margin-left: 25px;
+            width: calc(100% - 25px); 
+        }
+        .actions-row.right-only {
+            justify-content: flex-end;
+        }
+
+        .btn-ok {
+            background-color: var(--papernest-blue);
+            color: white;
+            border: none;
+            border-radius: 30px;
+            padding: 14px 32px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            font-family: inherit;
+        }
+        .btn-ok:hover { background-color: var(--papernest-blue-hover); }
+
+        /* Flèches de navigation */
+        .nav-arrows {
+            display: flex;
+            gap: 10px;
+        }
+        .nav-btn {
+            background-color: var(--papernest-blue);
+            border: none;
+            color: white;
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 20px;
+            font-weight: bold;
+            transition: all 0.2s ease;
+        }
+        .nav-btn:hover:not(:disabled) {
+            background-color: var(--papernest-blue-hover);
+        }
+        .nav-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            background-color: var(--border-color);
+            color: var(--text-muted);
+        }
+
+        /* Écrans de Bienvenue et de Fin */
+        .welcome-screen, .final-screen {
+            text-align: center;
+            padding: 20px 0;
+        }
+        .welcome-screen h2, .final-screen h2 { 
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 20px; 
+            color: var(--text-main);
+            line-height: 1.5;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .welcome-screen p, .final-screen p { 
+            color: var(--text-muted); 
+            font-size: 16px; 
+            line-height: 1.5;
+            margin-bottom: 30px;
+            max-width: 550px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        /* Ajustements pour mobiles */
+        @media (max-width: 600px) {
+            .container { 
+                padding: 30px 20px; 
+                width: calc(100% - 32px); 
+                margin: 16px auto; 
+                border-radius: 12px; 
+            }
+            .question-title { font-size: 20px; }
+            .actions-row, .choices-container, .question-desc { margin-left: 0; }
+            .actions-row { width: 100%; }
+            .welcome-screen h2, .final-screen h2 { font-size: 20px; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container" id="typeform-container">
+
+        <div class="progress-bar-container" id="pb-container">
+            <div class="progress-bar" id="progress-bar"></div>
+        </div>
+
+        <div class="step active welcome-screen" data-step="0">
+            <h2>💰 <b>Faites le test et économisez</b> sur vos factures d'énergie 💰</h2>
+            <p>Découvrez en 5 clics si l’option Heures Pleines / Heures Creuses est faite pour vous !</p>
+            <button class="btn-ok" onclick="navigate(1)">Commencer</button>
+        </div>
+
+        <div class="step" data-step="1">
+            <h2 class="question-title"><span class="q-number">1.</span> À quels moments de la journée consommez-vous le plus d’électricité ?</h2>
+            <div class="choices-container grid-1" id="q1">
+                <button class="choice-btn single-choice" onclick="selectSingleChoice(this, 'q1')"><span class="choice-letter">A</span> Principalement la nuit ou tôt le matin</button>
+                <button class="choice-btn single-choice" onclick="selectSingleChoice(this, 'q1')"><span class="choice-letter">B</span> De manière équilibrée</button>
+                <button class="choice-btn single-choice" onclick="selectSingleChoice(this, 'q1')"><span class="choice-letter">C</span> Cela dépend des jours</button>
+                <button class="choice-btn single-choice" onclick="selectSingleChoice(this, 'q1')"><span class="choice-letter">D</span> Principalement la journée</button>
+            </div>
+            
+            <div class="actions-row">
+                <button class="btn-ok" onclick="navigate(1)">Ok</button>
+                <div class="nav-arrows">
+                    <button class="nav-btn nav-btn-prev" onclick="navigate(-1)">&#8592;</button>
+                    <button class="nav-btn nav-btn-next" onclick="navigate(1)">&#8594;</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="step" data-step="2">
+            <h2 class="question-title"><span class="q-number">2.</span> Quels appareils possédez-vous ?</h2>
+            <div class="choices-container grid-1" id="q2">
+                <button class="choice-btn" onclick="toggleChoice(this)"><span class="choice-letter">A</span> Chauffe-eau électrique</button>
+                <button class="choice-btn" onclick="toggleChoice(this)"><span class="choice-letter">B</span> Chauffage électrique</button>
+                <button class="choice-btn" onclick="toggleChoice(this)"><span class="choice-letter">C</span> Machine à laver</button>
+                <button class="choice-btn" onclick="toggleChoice(this)"><span class="choice-letter">D</span> Sèche-linge</button>
+                <button class="choice-btn" onclick="toggleChoice(this)"><span class="choice-letter">E</span> Lave-vaisselle</button>
+                <button class="choice-btn" onclick="toggleChoice(this)"><span class="choice-letter">F</span> Voiture électrique</button>
+            </div>
+            
+            <div class="actions-row">
+                <button class="btn-ok" onclick="navigate(1)">Ok</button>
+                <div class="nav-arrows">
+                    <button class="nav-btn nav-btn-prev" onclick="navigate(-1)">&#8592;</button>
+                    <button class="nav-btn nav-btn-next" onclick="navigate(1)">&#8594;</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="step" data-step="3">
+            <h2 class="question-title"><span class="q-number">3.</span> Lesquels de vos appareils sont programmables ?</h2>
+            <div class="choices-container grid-1" id="q3">
+                <button class="choice-btn" onclick="toggleChoice(this)"><span class="choice-letter">A</span> Chauffe-eau électrique</button>
+                <button class="choice-btn" onclick="toggleChoice(this)"><span class="choice-letter">B</span> Chauffage électrique</button>
+                <button class="choice-btn" onclick="toggleChoice(this)"><span class="choice-letter">C</span> Machine à laver</button>
+                <button class="choice-btn" onclick="toggleChoice(this)"><span class="choice-letter">D</span> Sèche-linge</button>
+                <button class="choice-btn" onclick="toggleChoice(this)"><span class="choice-letter">E</span> Lave-vaisselle</button>
+                <button class="choice-btn" onclick="toggleChoice(this)"><span class="choice-letter">F</span> Aucun appareil programmable</button>
+            </div>
+            
+            <div class="actions-row">
+                <button class="btn-ok" onclick="navigate(1)">Ok</button>
+                <div class="nav-arrows">
+                    <button class="nav-btn nav-btn-prev" onclick="navigate(-1)">&#8592;</button>
+                    <button class="nav-btn nav-btn-next" onclick="navigate(1)">&#8594;</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="step" data-step="4">
+            <h2 class="question-title"><span class="q-number">4.</span> Quel est le type de votre logement ?</h2>
+            <div class="choices-container grid-1" id="q4">
+                <button class="choice-btn single-choice" onclick="selectSingleChoice(this, 'q4')"><span class="choice-letter">A</span> Appartement -50m²</button>
+                <button class="choice-btn single-choice" onclick="selectSingleChoice(this, 'q4')"><span class="choice-letter">B</span> Appartement + 50m²</button>
+                <button class="choice-btn single-choice" onclick="selectSingleChoice(this, 'q4')"><span class="choice-letter">C</span> Maison individuelle</button>
+                <button class="choice-btn single-choice" onclick="selectSingleChoice(this, 'q4')"><span class="choice-letter">D</span> Résidence secondaire</button>
+            </div>
+            
+            <div class="actions-row">
+                <button class="btn-ok" onclick="navigate(1)">Ok</button>
+                <div class="nav-arrows">
+                    <button class="nav-btn nav-btn-prev" onclick="navigate(-1)">&#8592;</button>
+                    <button class="nav-btn nav-btn-next" onclick="navigate(1)">&#8594;</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="step" data-step="5">
+            <h2 class="question-title"><span class="q-number">5.</span> Combien de personnes vivent dans votre foyer ?</h2>
+            <div class="choices-container grid-1" id="q5">
+                <button class="choice-btn single-choice" onclick="selectSingleChoice(this, 'q5')"><span class="choice-letter">A</span> 1 personne</button>
+                <button class="choice-btn single-choice" onclick="selectSingleChoice(this, 'q5')"><span class="choice-letter">B</span> 2 personnes</button>
+                <button class="choice-btn single-choice" onclick="selectSingleChoice(this, 'q5')"><span class="choice-letter">C</span> 3 à 4 personnes</button>
+                <button class="choice-btn single-choice" onclick="selectSingleChoice(this, 'q5')"><span class="choice-letter">D</span> 5 personnes ou plus</button>
+            </div>
+            
+            <div class="actions-row" style="justify-content: flex-end;">
+                <div class="nav-arrows">
+                    <button class="nav-btn nav-btn-prev" onclick="navigate(-1)">&#8592;</button>
+                    <button class="nav-btn nav-btn-next" onclick="navigate(1)">&#8594;</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="step final-screen" data-step="final">
+            <h2 id="final-title">Titre dynamique</h2>
+            <p id="final-desc">Description dynamique</p>
+            <button class="btn-ok" onclick="location.reload()">Refaire le test</button>
+        </div>
+
+    </div>
+
+    <script>
+        let currentStepIndex = 0; // 0 = Écran d'accueil
+        const totalSteps = 5;
+
+        // Iframe Resizing
+        function sendHeightToParent() {
+            setTimeout(() => {
+                const container = document.getElementById('typeform-container');
+                if(container) {
+                    const height = container.offsetHeight;
+                    window.parent.postMessage({ type: 'resize', height: height + 20 }, '*');
+                }
+            }, 50); 
+        }
+
+        function updateProgressBar() {
+            const pbContainer = document.getElementById('pb-container');
+            if (currentStepIndex === 0 || currentStepIndex === 'final') {
+                pbContainer.style.display = 'none';
+            } else {
+                pbContainer.style.display = 'block';
+                const progressPercentage = (currentStepIndex / totalSteps) * 100;
+                document.getElementById('progress-bar').style.width = progressPercentage + '%';
+            }
+        }
+
+        function toggleChoice(button) {
+            button.classList.toggle('selected');
+        }
+
+        function selectSingleChoice(button, containerId) {
+            const buttons = document.querySelectorAll(`#${containerId} .choice-btn`);
+            buttons.forEach(btn => btn.classList.remove('selected'));
+            button.classList.add('selected');
+            setTimeout(() => { navigate(1); }, 300); 
+        }
+
+        function getSelectedValues(containerId) {
+            const selected = document.querySelectorAll(`#${containerId} .choice-btn.selected`);
+            return Array.from(selected).map(btn => btn.innerText.substring(2).trim());
+        }
+
+        function navigate(direction) {
+            if (currentStepIndex === totalSteps && direction === 1) {
+                calculerScoreFinal();
+                return;
+            }
+
+            const currentStep = document.querySelector(`.step[data-step="${currentStepIndex}"]`);
+            if (currentStep) currentStep.classList.remove('active');
+
+            currentStepIndex += direction;
+
+            const nextStep = document.querySelector(`.step[data-step="${currentStepIndex}"]`);
+            if (nextStep) nextStep.classList.add('active');
+
+            // On s'assure qu'on ne peut pas reculer sur l'écran d'accueil avec les flèches
+            document.querySelectorAll('.nav-btn-prev').forEach(btn => {
+                btn.disabled = (currentStepIndex <= 1);
+            });
+
+            updateProgressBar();
+            sendHeightToParent();
+        }
+
+        // --- MATHÉMATIQUES DU SCORE (JSON) ---
+        function calculerScoreFinal() {
+            let score = 0;
+
+            const q1 = getSelectedValues('q1')[0] || '';
+            const q2 = getSelectedValues('q2'); // Array
+            const q3 = getSelectedValues('q3'); // Array
+            const q4 = getSelectedValues('q4')[0] || '';
+            const q5 = getSelectedValues('q5')[0] || '';
+
+            // Q1
+            if (q1 === 'Principalement la nuit ou tôt le matin') score += 3;
+            if (q1 === 'De manière équilibrée') score += 2;
+            if (q1 === 'Cela dépend des jours') score += 1;
+            // 'Principalement la journée' vaut 0
+
+            // Q2
+            if (q2.includes('Chauffe-eau électrique')) score += 3;
+            if (q2.includes('Voiture électrique')) score += 3;
+            if (q2.includes('Machine à laver')) score += 2;
+            if (q2.includes('Lave-vaisselle')) score += 2;
+            if (q2.includes('Sèche-linge')) score += 2;
+            if (q2.includes('Chauffage électrique')) score += 1;
+
+            // Q3
+            if (q3.includes('Chauffe-eau électrique')) score += 3;
+            if (q3.includes('Machine à laver')) score += 3;
+            if (q3.includes('Lave-vaisselle')) score += 3;
+            if (q3.includes('Sèche-linge')) score += 2;
+            if (q3.includes('Chauffage électrique')) score += 1;
+            // 'Aucun appareil programmable' vaut 0
+
+            // Q4
+            if (q4 === 'Maison individuelle') score += 3;
+            if (q4 === 'Appartement + 50m²') score += 2;
+            if (q4 === 'Appartement -50m²') score += 1;
+            // 'Résidence secondaire' vaut 0
+
+            // Q5
+            if (q5 === '3 à 4 personnes') score += 3;
+            if (q5 === '5 personnes ou plus') score += 2;
+            if (q5 === '2 personnes') score += 1;
+            // '1 personne' vaut 0
+
+            afficherEcranFinal(score);
+        }
+
+        function afficherEcranFinal(score) {
+            document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
+            updateProgressBar(); // Pour cacher la barre
+
+            let title = "";
+            let desc = "";
+
+            // Mapping des résultats selon le score du JSON
+            if (score <= 8) {
+                // Pas adapté
+                title = "<b>🧐 Un contrat heures creuses n'est probablement pas adapté...</b>";
+                desc = "Mais pas de panique, d’autres options pourraient vous convenir !<br><br>Pour les découvrir, appelez papernest<br>📞 <b>09 70 25 21 49</b>";
+            } else if (score <= 19) {
+                // Peut être rentable
+                title = "<span style='color: #F59E0B;'>💡</span> <b>Cela peut être rentable si vous modifiez légèrement vos habitudes :</b>";
+                desc = "En utilisant vos appareils électriques pendant les heures creuses ou en les programmant la nuit.<br><br>Discutez-en avec un conseiller papernest<br>📞 <b>09 70 25 21 49</b>";
+            } else {
+                // Bon profil (20 et +)
+                title = "<span style='color: #10B981;'>✅</span> <b>Vous avez le bon profil pour profiter de l’option Heures Creuses !</b>";
+                desc = "La plupart de votre consommation est concentrée en heures creuses.<br><br>Contactez dès maintenant papernest pour trouver l'offre qui vous convient et faire des économies !<br><br>📞 <b>09 70 25 21 49</b>";
+            }
+
+            document.getElementById('final-title').innerHTML = title;
+            document.getElementById('final-desc').innerHTML = desc;
+
+            document.querySelector('.final-screen').classList.add('active');
+            sendHeightToParent();
+        }
+
+        window.addEventListener('load', sendHeightToParent);
+
+    </script>
+</body>
+</html>

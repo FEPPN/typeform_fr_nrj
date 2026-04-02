@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Estimation de consommation Gaz - Papernest</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* --- CSS : Design Papernest --- */
+        :root {
+            --papernest-blue: #5A52FF;
+            --papernest-blue-light: #EEEDFF;
+            --papernest-blue-hover: #4A42E5;
+            --text-main: #1A1A1A;
+            --text-muted: #6B7280;
+            --border-color: #E5E7EB;
+            --bg-main: #FFFFFF;
+            --bg-body: #F9FAFB;
+        }
+
+        /* MODIFICATION : Fond transparent, retrait du flex et min-height */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: transparent; /* Fond transparent */
+            color: var(--text-main);
+            margin: 0;
+            padding: 10px; /* Espace pour l'ombre */
+        }
+
+        /* MODIFICATION : Centrage horizontal via margin: 0 auto */
+        .container {
+            width: 100%;
+            max-width: 700px;
+            background-color: var(--bg-main);
+            padding: 50px;
+            border-radius: 16px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+            position: relative;
+            box-sizing: border-box;
+            margin: 0 auto; /* Centrage */
+        }
+
+        /* Barre de progression */
+        .progress-bar-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 6px;
+            background-color: var(--papernest-blue-light);
+            border-top-left-radius: 16px;
+            border-top-right-radius: 16px;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background-color: var(--papernest-blue);
+            width: 20%; 
+            transition: width 0.4s ease-out;
+        }
+
+        /* Gestion de l'affichage étape par étape */
+        .step {
+            display: none;
+            animation: fadeIn 0.4s ease-out;
+        }
+        .step.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Style des textes et questions */
+        .question-title {
+            font-size: 24px;
+            font-weight: 600;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            line-height: 1.3;
+        }
+
+        .q-number {
+            color: var(--papernest-blue);
+            font-size: 16px;
+            font-weight: 700;
+            margin-right: 12px;
+            flex-shrink: 0;
+        }
+
+        .question-desc {
+            color: var(--text-muted);
+            font-size: 15px;
+            margin-left: 25px;
+            margin-top: 8px;
+            margin-bottom: 10px;
+        }
+
+        /* Champs de saisie */
+        .input-text {
+            border: 2px solid var(--border-color);
+            border-radius: 12px;
+            font-size: 18px;
+            color: var(--text-main);
+            padding: 16px 20px;
+            width: 100%;
+            max-width: 400px;
+            background: #FFFFFF;
+            margin-left: 25px;
+            outline: none;
+            transition: all 0.2s ease;
+            box-sizing: border-box;
+            margin-top: 24px;
+        }
+        .input-text::placeholder { color: #9CA3AF; }
+        .input-text:focus { 
+            border-color: var(--papernest-blue); 
+            box-shadow: 0 0 0 4px var(--papernest-blue-light);
+        }
+
+        /* Grilles et choix multiples */
+        .choices-container {
+            margin-left: 25px;
+            margin-top: 24px;
+            display: grid;
+            gap: 12px;
+        }
+        .grid-1 { grid-template-columns: 1fr; max-width: 450px; }
+
+        .choice-btn {
+            background-color: var(--bg-main);
+            border: 2px solid var(--border-color);
+            border-radius: 12px;
+            padding: 14px 16px;
+            font-size: 16px;
+            font-weight: 500;
+            color: var(--text-main);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            transition: all 0.2s ease;
+            text-align: left;
+            font-family: inherit;
+        }
+        .choice-btn:hover { 
+            border-color: var(--papernest-blue);
+            background-color: var(--papernest-blue-light);
+        }
+        .choice-btn.selected {
+            background-color: var(--papernest-blue-light);
+            border-color: var(--papernest-blue);
+            color: var(--papernest-blue);
+        }
+
+        .choice-letter {
+            background-color: var(--border-color);
+            color: var(--text-muted);
+            font-size: 12px;
+            font-weight: 700;
+            width: 24px;
+            height: 24px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 6px;
+            margin-right: 12px;
+            flex-shrink: 0;
+            transition: all 0.2s ease;
+        }
+        .choice-btn:hover .choice-letter {
+            background-color: white;
+            color: var(--papernest-blue);
+        }
+        .choice-btn.selected .choice-letter {
+            background-color: var(--papernest-blue);
+            color: white;
+            border-color: var(--papernest-blue);
+        }
+
+        /* Ligne d'actions : Bouton OK et Flèches */
+        .actions-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 30px;
+            margin-left: 25px;
+            width: calc(100% - 25px); 
+        }
+
+        .btn-ok {
+            background-color: var(--papernest-blue);
+            color: white;
+            border: none;
+            border-radius: 30px;
+            padding: 14px 32px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            font-family: inherit;
+        }
+        .btn-ok:hover { background-color: var(--papernest-blue-hover); }
+
+        /* Flèches de navigation */
+        .nav-arrows {
+            display: flex;
+            gap: 10px;
+        }
+        .nav-btn {
+            background-color: var(--papernest-blue);
+            border: none;
+            color: white;
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 20px;
+            font-weight: bold;
+            transition: all 0.2s ease;
+        }
+        .nav-btn:hover:not(:disabled) {
+            background-color: var(--papernest-blue-hover);
+        }
+        .nav-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            background-color: var(--border-color);
+            color: var(--text-muted);
+        }
+
+        /* Écran de fin */
+        .final-screen {
+            text-align: center;
+            padding: 20px 0;
+        }
+        .final-screen h2 { 
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 20px; 
+            color: var(--papernest-blue);
+            line-height: 1.5;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .final-screen p { 
+            color: var(--text-muted); 
+            font-size: 16px; 
+            line-height: 1.5;
+            margin-bottom: 30px;
+            max-width: 550px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        /* Ajustements pour mobiles */
+        @media (max-width: 600px) {
+            .container { 
+                padding: 30px 20px; 
+                width: calc(100% - 32px); 
+                margin: 16px auto; /* Centrage mobile */
+                border-radius: 12px; 
+            }
+            .question-title { font-size: 20px; }
+            .input-text, .actions-row, .choices-container, .question-desc { margin-left: 0; }
+            .actions-row { width: 100%; }
+            .final-screen h2 { font-size: 20px; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container" id="typeform-container">
+
+        <div class="progress-bar-container">
+            <div class="progress-bar" id="progress-bar"></div>
+        </div>
+
+        <div class="step active" data-step="1">
+            <h2 class="question-title"><span class="q-number">1.</span> Quelle est la surface de votre logement en m2 ?</h2>
+            <div class="question-desc">Écrire en chiffre</div>
+            <input type="number" id="q1" class="input-text" placeholder="Saisissez votre réponse ici...">
+            
+            <div class="actions-row">
+                <button class="btn-ok" onclick="navigate(1)">Ok</button>
+                <div class="nav-arrows">
+                    <button class="nav-btn nav-btn-prev" onclick="navigate(-1)" disabled>&#8592;</button>
+                    <button class="nav-btn nav-btn-next" onclick="navigate(1)">&#8594;</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="step" data-step="2">
+            <h2 class="question-title"><span class="q-number">2.</span> Combien de personnes habitent dans votre logement ?</h2>
+            <div class="question-desc">Écrire en chiffre</div>
+            <input type="number" id="q2" class="input-text" placeholder="Saisissez votre réponse ici...">
+            
+            <div class="actions-row">
+                <button class="btn-ok" onclick="navigate(1)">Ok</button>
+                <div class="nav-arrows">
+                    <button class="nav-btn nav-btn-prev" onclick="navigate(-1)">&#8592;</button>
+                    <button class="nav-btn nav-btn-next" onclick="navigate(1)">&#8594;</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="step" data-step="3">
+            <h2 class="question-title"><span class="q-number">3.</span> Quels sont vos principaux équipements qui utilisent le gaz ?</h2>
+            <div class="question-desc">Choisissez-en autant que vous voulez</div>
+            <div class="choices-container grid-1" id="q3">
+                <button class="choice-btn" onclick="toggleChoice(this)"><span class="choice-letter">A</span> Chauffage</button>
+                <button class="choice-btn" onclick="toggleChoice(this)"><span class="choice-letter">B</span> Eau chaude</button>
+                <button class="choice-btn" onclick="toggleChoice(this)"><span class="choice-letter">C</span> Cuisson</button>
+            </div>
+            
+            <div class="actions-row">
+                <button class="btn-ok" onclick="navigate(1)">Ok</button>
+                <div class="nav-arrows">
+                    <button class="nav-btn nav-btn-prev" onclick="navigate(-1)">&#8592;</button>
+                    <button class="nav-btn nav-btn-next" onclick="navigate(1)">&#8594;</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="step" data-step="4">
+            <h2 class="question-title"><span class="q-number">4.</span> Si vous utilisez le gaz pour le chauffage, quel est votre type de chauffage ?</h2>
+            <div class="choices-container grid-1" id="q4">
+                <button class="choice-btn" onclick="toggleChoice(this)"><span class="choice-letter">A</span> Chauffage individuel (chaudière)</button>
+                <button class="choice-btn" onclick="toggleChoice(this)"><span class="choice-letter">B</span> Chauffage collectif</button>
+            </div>
+            
+            <div class="actions-row">
+                <button class="btn-ok" onclick="navigate(1)">Ok</button>
+                <div class="nav-arrows">
+                    <button class="nav-btn nav-btn-prev" onclick="navigate(-1)">&#8592;</button>
+                    <button class="nav-btn nav-btn-next" onclick="navigate(1)">&#8594;</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="step" data-step="5">
+            <h2 class="question-title"><span class="q-number">5.</span> Votre logement est-il bien isolé ?</h2>
+            <div class="question-desc">Veuillez faire un seul choix</div>
+            <div class="choices-container grid-1" id="q5">
+                <button class="choice-btn single-choice" onclick="selectSingleChoice(this, 'q5')"><span class="choice-letter">A</span> Oui, très bien isolé</button>
+                <button class="choice-btn single-choice" onclick="selectSingleChoice(this, 'q5')"><span class="choice-letter">B</span> Assez bien isolé</button>
+                <button class="choice-btn single-choice" onclick="selectSingleChoice(this, 'q5')"><span class="choice-letter">C</span> Pas très bien isolé</button>
+                <button class="choice-btn single-choice" onclick="selectSingleChoice(this, 'q5')"><span class="choice-letter">D</span> Pas isolé</button>
+            </div>
+            
+            <div class="actions-row" style="justify-content: flex-end;">
+                <div class="nav-arrows">
+                    <button class="nav-btn nav-btn-prev" onclick="navigate(-1)">&#8592;</button>
+                    <button class="nav-btn nav-btn-next" onclick="navigate(1)">&#8594;</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="step final-screen" data-step="final">
+            <h2 id="final-score-text">Votre consommation moyenne est de 0 kWh/an.</h2>
+            <p>Les conseillers papernest vous accompagnent si vous souhaitez faire des économies sur votre facture.</p>
+            <button class="btn-ok" onclick="window.top.location.href='https://www.papernest.com/papernest-switch/'">Trouver votre offre</button>
+        </div>
+
+    </div>
+
+    <script>
+        let currentStepIndex = 1;
+        const totalSteps = 5;
+
+        /* MODIFICATION : Fonction de communication de la hauteur */
+        function sendHeightToParent() {
+            setTimeout(() => {
+                const container = document.getElementById('typeform-container');
+                if(container) {
+                    const height = container.offsetHeight;
+                    window.parent.postMessage({ type: 'resize', height: height + 20 }, '*');
+                }
+            }, 50); 
+        }
+
+        function updateProgressBar() {
+            const progressPercentage = (currentStepIndex / totalSteps) * 100;
+            document.getElementById('progress-bar').style.width = progressPercentage + '%';
+        }
+
+        function toggleChoice(button) {
+            button.classList.toggle('selected');
+        }
+
+        function selectSingleChoice(button, containerId) {
+            const buttons = document.querySelectorAll(`#${containerId} .choice-btn`);
+            buttons.forEach(btn => btn.classList.remove('selected'));
+            button.classList.add('selected');
+            setTimeout(() => { navigate(1); }, 300); 
+        }
+
+        function getSelectedValues(containerId) {
+            const selected = document.querySelectorAll(`#${containerId} .choice-btn.selected`);
+            return Array.from(selected).map(btn => btn.innerText.substring(2).trim());
+        }
+
+        function navigate(direction) {
+            if (currentStepIndex === totalSteps && direction === 1) {
+                calculerScoreFinal();
+                return;
+            }
+
+            const currentStep = document.querySelector(`.step[data-step="${currentStepIndex}"]`);
+            currentStep.classList.remove('active');
+
+            currentStepIndex += direction;
+
+            const nextStep = document.querySelector(`.step[data-step="${currentStepIndex}"]`);
+            nextStep.classList.add('active');
+
+            document.querySelectorAll('.nav-btn-prev').forEach(btn => {
+                btn.disabled = (currentStepIndex === 1);
+            });
+
+            updateProgressBar();
+
+            /* MODIFICATION : Appel de la fonction à chaque navigation */
+            sendHeightToParent();
+        }
+
+        function calculerScoreFinal() {
+            let score = 1;
+            let chauffage = 110;
+            let cuisson = 200;
+            let eauchaude = 1300;
+
+            const surface = parseInt(document.getElementById('q1').value) || 1;
+            const personnes = parseInt(document.getElementById('q2').value) || 1;
+            const equipements = getSelectedValues('q3');
+            const typeChauffage = getSelectedValues('q4');
+            const isolation = getSelectedValues('q5')[0] || '';
+
+            score = score * surface;
+
+            if (typeChauffage.includes('Chauffage collectif')) chauffage += 20;
+
+            if (isolation === 'Assez bien isolé') chauffage += 20;
+            if (isolation === 'Pas très bien isolé') chauffage += 50;
+            if (isolation === 'Pas isolé') chauffage += 100;
+
+            if (equipements.includes('Chauffage')) {
+                chauffage = chauffage * surface;
+                score += chauffage;
+            }
+            if (equipements.includes('Eau chaude')) {
+                eauchaude = eauchaude * personnes;
+                score += eauchaude;
+            }
+            if (equipements.includes('Cuisson')) {
+                cuisson = cuisson * personnes;
+                score += cuisson;
+            }
+
+            document.querySelector(`.step[data-step="${totalSteps}"]`).classList.remove('active');
+
+            document.getElementById('final-score-text').innerText = `Votre consommation moyenne est de ${score} kWh/an.`;
+            document.querySelector(`.step[data-step="final"]`).classList.add('active');
+
+            document.querySelector('.progress-bar-container').style.display = 'none';
+
+            /* MODIFICATION : Appel de la fonction pour l'écran final */
+            sendHeightToParent();
+        }
+
+        document.querySelectorAll('.input-text').forEach((input) => {
+            input.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    navigate(1);
+                }
+            });
+        });
+
+        /* MODIFICATION : Initialisation au chargement */
+        window.addEventListener('load', sendHeightToParent);
+
+    </script>
+</body>
+</html>

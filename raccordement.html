@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ouverture d'un compteur EDF - Papernest</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* --- CSS : Design adapté à l'identité visuelle Papernest --- */
+        :root {
+            --papernest-blue: #5A52FF;
+            --papernest-blue-light: #EEEDFF;
+            --papernest-blue-hover: #4A42E5;
+            --text-main: #1A1A1A;
+            --text-muted: #6B7280;
+            --border-color: #E5E7EB;
+            --bg-main: #FFFFFF;
+            --bg-body: #F9FAFB;
+        }
+
+        /* MODIFICATION : Fond transparent et retrait du centrage forcé en hauteur */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: transparent; 
+            color: var(--text-main);
+            margin: 0;
+            padding: 10px;
+        }
+
+        /* MODIFICATION : Ajout de margin: 0 auto pour centrer horizontalement */
+        .container {
+            width: 100%;
+            max-width: 700px;
+            background-color: var(--bg-main);
+            padding: 50px;
+            border-radius: 16px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+            position: relative;
+            box-sizing: border-box;
+            margin: 0 auto; 
+        }
+
+        /* Barre de progression */
+        .progress-bar-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 6px;
+            background-color: var(--papernest-blue-light);
+            border-top-left-radius: 16px;
+            border-top-right-radius: 16px;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background-color: var(--papernest-blue);
+            width: 20%; 
+            transition: width 0.4s ease-out;
+        }
+
+        /* Gestion de l'affichage */
+        .step {
+            display: none;
+            animation: fadeIn 0.4s ease-out;
+        }
+        .step.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Textes et questions */
+        .question-title {
+            font-size: 24px;
+            font-weight: 600;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            line-height: 1.3;
+        }
+
+        .q-number {
+            color: var(--papernest-blue);
+            font-size: 16px;
+            font-weight: 700;
+            margin-right: 12px;
+            flex-shrink: 0;
+        }
+
+        .question-desc {
+            color: var(--text-muted);
+            font-size: 15px;
+            margin-left: 25px;
+            margin-top: 8px;
+            margin-bottom: 10px; 
+        }
+
+        /* Grilles et choix multiples */
+        .choices-container {
+            margin-left: 25px;
+            margin-top: 24px; 
+            display: grid;
+            gap: 12px;
+        }
+        .grid-1 { grid-template-columns: 1fr; max-width: 450px; }
+
+        .choice-btn {
+            background-color: var(--bg-main);
+            border: 2px solid var(--border-color);
+            border-radius: 12px;
+            padding: 14px 16px;
+            font-size: 16px;
+            font-weight: 500;
+            color: var(--text-main);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            transition: all 0.2s ease;
+            text-align: left;
+            font-family: inherit;
+        }
+        .choice-btn:hover { 
+            border-color: var(--papernest-blue);
+            background-color: var(--papernest-blue-light);
+        }
+        .choice-btn.selected {
+            background-color: var(--papernest-blue-light);
+            border-color: var(--papernest-blue);
+            color: var(--papernest-blue);
+        }
+
+        .choice-letter {
+            background-color: var(--border-color);
+            color: var(--text-muted);
+            font-size: 12px;
+            font-weight: 700;
+            width: 24px;
+            height: 24px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 6px;
+            margin-right: 12px;
+            flex-shrink: 0;
+            transition: all 0.2s ease;
+        }
+        .choice-btn:hover .choice-letter {
+            background-color: white;
+            color: var(--papernest-blue);
+        }
+        .choice-btn.selected .choice-letter {
+            background-color: var(--papernest-blue);
+            color: white;
+            border-color: var(--papernest-blue);
+        }
+
+        /* Ligne d'actions */
+        .actions-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 30px;
+            margin-left: 25px;
+            width: calc(100% - 25px); 
+        }
+        .actions-row.right-only {
+            justify-content: flex-end;
+        }
+
+        .btn-ok {
+            background-color: var(--papernest-blue);
+            color: white;
+            border: none;
+            border-radius: 30px;
+            padding: 14px 32px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            font-family: inherit;
+        }
+        .btn-ok:hover { background-color: var(--papernest-blue-hover); }
+
+        /* Flèches de navigation */
+        .nav-arrows {
+            display: flex;
+            gap: 10px;
+        }
+        .nav-btn {
+            background-color: var(--papernest-blue);
+            border: none;
+            color: white;
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 20px;
+            font-weight: bold;
+            transition: all 0.2s ease;
+        }
+        .nav-btn:hover:not(:disabled) {
+            background-color: var(--papernest-blue-hover);
+        }
+        .nav-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            background-color: var(--border-color);
+            color: var(--text-muted);
+        }
+
+        /* Écran de fin */
+        .final-screen {
+            text-align: center;
+            padding: 20px 0;
+        }
+        .final-screen h2 { 
+            font-size: 20px; 
+            font-weight: 600;
+            margin-bottom: 20px; 
+            color: var(--papernest-blue);
+            line-height: 1.5; 
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .final-screen p { 
+            color: var(--text-muted); 
+            font-size: 15px; 
+            line-height: 1.5;
+            margin-bottom: 30px;
+            max-width: 550px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        /* Ajustements pour mobiles */
+        @media (max-width: 600px) {
+            .container { 
+                padding: 30px 20px; 
+                width: calc(100% - 32px); 
+                margin: 16px auto; /* Ajout de auto pour le centrage mobile */
+                border-radius: 12px; 
+            }
+            .question-title { font-size: 20px; }
+            .actions-row, .choices-container, .question-desc { margin-left: 0; }
+            .actions-row { width: 100%; }
+            .final-screen h2 { font-size: 18px; } 
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container" id="typeform-container">
+
+        <div class="progress-bar-container">
+            <div class="progress-bar" id="progress-bar"></div>
+        </div>
+
+        <div class="step active" data-step="1">
+            <h2 class="question-title">Combien va vous coûter l'ouverture de votre compteur ?</h2>
+            <div class="question-desc">Locataire ou propriétaire ? Maison neuve ou ancienne ? ...</div>
+            
+            <div class="actions-row right-only">
+                <button class="btn-ok" onclick="navigateForward()">Commencer</button>
+            </div>
+        </div>
+
+        <div class="step" data-step="2">
+            <h2 class="question-title"><span class="q-number">1.</span> Vous êtes locataire ou propriétaire ?</h2>
+            <div class="choices-container grid-1" id="q2">
+                <button class="choice-btn single-choice" onclick="selectChoice(this, 'q2')"><span class="choice-letter">A</span> Locataire</button>
+                <button class="choice-btn single-choice" onclick="selectChoice(this, 'q2')"><span class="choice-letter">B</span> Propriétaire</button>
+            </div>
+            
+            <div class="actions-row">
+                <button class="btn-ok" onclick="navigateForward()">Ok</button>
+                <div class="nav-arrows">
+                    <button class="nav-btn nav-btn-prev" onclick="navigateBackward()">&#8592;</button>
+                    <button class="nav-btn nav-btn-next" onclick="navigateForward()">&#8594;</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="step" data-step="3">
+            <h2 class="question-title"><span class="q-number">2.</span> Le logement dans lequel vous emménagez est-il neuf ou ancien ?</h2>
+            <div class="choices-container grid-1" id="q3">
+                <button class="choice-btn single-choice" onclick="selectChoice(this, 'q3')"><span class="choice-letter">A</span> Logement neuf</button>
+                <button class="choice-btn single-choice" onclick="selectChoice(this, 'q3')"><span class="choice-letter">B</span> Logement ancien</button>
+            </div>
+            
+            <div class="actions-row">
+                <button class="btn-ok" onclick="navigateForward()">Ok</button>
+                <div class="nav-arrows">
+                    <button class="nav-btn nav-btn-prev" onclick="navigateBackward()">&#8592;</button>
+                    <button class="nav-btn nav-btn-next" onclick="navigateForward()">&#8594;</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="step" data-step="4">
+            <h2 class="question-title"><span class="q-number">3.</span> Quel type de mise en service souhaitez-vous ?</h2>
+            <div class="choices-container grid-1" id="q4">
+                <button class="choice-btn single-choice" onclick="selectChoice(this, 'q4')"><span class="choice-letter">A</span> Mise en service standard (sous 10 jours ouvrés)</button>
+                <button class="choice-btn single-choice" onclick="selectChoice(this, 'q4')"><span class="choice-letter">B</span> Mise en service express (sous 5 jours ouvrés)</button>
+            </div>
+            
+            <div class="actions-row">
+                <button class="btn-ok" onclick="navigateForward()">Ok</button>
+                <div class="nav-arrows">
+                    <button class="nav-btn nav-btn-prev" onclick="navigateBackward()">&#8592;</button>
+                    <button class="nav-btn nav-btn-next" onclick="navigateForward()">&#8594;</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="step" data-step="5">
+            <h2 class="question-title"><span class="q-number">3.</span> Quel type de compteur avez-vous ?</h2>
+            <div class="choices-container grid-1" id="q5">
+                <button class="choice-btn single-choice" onclick="selectChoice(this, 'q5')"><span class="choice-letter">A</span> Compteur mécanique (ancienne génération)</button>
+                <button class="choice-btn single-choice" onclick="selectChoice(this, 'q5')"><span class="choice-letter">B</span> Compteur communicant Linky</button>
+            </div>
+            
+            <div class="actions-row">
+                <button class="btn-ok" onclick="navigateForward()">Ok</button>
+                <div class="nav-arrows">
+                    <button class="nav-btn nav-btn-prev" onclick="navigateBackward()">&#8592;</button>
+                    <button class="nav-btn nav-btn-next" onclick="navigateForward()">&#8594;</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="step" data-step="6">
+            <h2 class="question-title"><span class="q-number">4.</span> Quel type de mise en service souhaitez-vous ?</h2>
+            <div class="choices-container grid-1" id="q6">
+                <button class="choice-btn single-choice" onclick="selectChoice(this, 'q6')"><span class="choice-letter">A</span> Mise en service standard (sous 5 jours ouvrés)</button>
+                <button class="choice-btn single-choice" onclick="selectChoice(this, 'q6')"><span class="choice-letter">B</span> Mise en service express (sous 2 jours ouvrés)</button>
+                <button class="choice-btn single-choice" onclick="selectChoice(this, 'q6')"><span class="choice-letter">C</span> Mise en service d'urgence (le jour même)</button>
+            </div>
+            
+            <div class="actions-row">
+                <button class="btn-ok" onclick="navigateForward()">Ok</button>
+                <div class="nav-arrows">
+                    <button class="nav-btn nav-btn-prev" onclick="navigateBackward()">&#8592;</button>
+                    <button class="nav-btn nav-btn-next" onclick="navigateForward()">&#8594;</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="step" data-step="7">
+            <h2 class="question-title"><span class="q-number">4.</span> Quel type de mise en service souhaitez-vous ?</h2>
+            <div class="choices-container grid-1" id="q7">
+                <button class="choice-btn single-choice" onclick="selectChoice(this, 'q7')"><span class="choice-letter">A</span> Mise en service standard (sous 24h)</button>
+                <button class="choice-btn single-choice" onclick="selectChoice(this, 'q7')"><span class="choice-letter">B</span> Mise en service d'urgence (le jour même)</button>
+            </div>
+            
+            <div class="actions-row">
+                <button class="btn-ok" onclick="navigateForward()">Ok</button>
+                <div class="nav-arrows">
+                    <button class="nav-btn nav-btn-prev" onclick="navigateBackward()">&#8592;</button>
+                    <button class="nav-btn nav-btn-next" onclick="navigateForward()">&#8594;</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="step" data-step="8">
+            <h2 class="question-title"><span class="q-number">2.</span> Votre logement est-il neuf ou ancien ?</h2>
+            <div class="question-desc">On se place ici dans la situation où vous êtes propriétaire et que vous souhaitez mettre votre logement à la location.</div>
+            <div class="choices-container grid-1" id="q8">
+                <button class="choice-btn single-choice" onclick="selectChoice(this, 'q8')"><span class="choice-letter">A</span> Logement neuf</button>
+                <button class="choice-btn single-choice" onclick="selectChoice(this, 'q8')"><span class="choice-letter">B</span> Logement ancien</button>
+            </div>
+            
+            <div class="actions-row">
+                <button class="btn-ok" onclick="navigateForward()">Ok</button>
+                <div class="nav-arrows">
+                    <button class="nav-btn nav-btn-prev" onclick="navigateBackward()">&#8592;</button>
+                    <button class="nav-btn nav-btn-next" onclick="navigateForward()">&#8594;</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="step final-screen" data-step="final">
+            <h2 id="final-title">Titre dynamique</h2>
+            <p id="final-desc">Description dynamique</p>
+            <button class="btn-ok" onclick="location.reload()">Recommencer</button>
+        </div>
+
+    </div>
+
+    <script>
+        let historyStack = [1];
+        const maxDepth = 5; 
+
+        /* MODIFICATION : Fonction pour envoyer la hauteur à la page principale */
+        function sendHeightToParent() {
+            setTimeout(() => {
+                const container = document.getElementById('typeform-container');
+                if(container) {
+                    const height = container.offsetHeight;
+                    window.parent.postMessage({ type: 'resize', height: height + 20 }, '*');
+                }
+            }, 50); 
+        }
+
+        function selectChoice(button, containerId) {
+            const buttons = document.querySelectorAll(`#${containerId} .choice-btn`);
+            buttons.forEach(btn => btn.classList.remove('selected'));
+            button.classList.add('selected');
+            
+            setTimeout(() => { navigateForward(); }, 300); 
+        }
+
+        function getSelectedValue(containerId) {
+            const btn = document.querySelector(`#${containerId} .choice-btn.selected`);
+            return btn ? btn.innerText.substring(2).trim() : null;
+        }
+
+        function getNextStepOrResult(currentStep) {
+            if (currentStep === 1) return 2;
+            
+            if (currentStep === 2) {
+                let val = getSelectedValue('q2');
+                if (!val) return null; 
+                if (val === 'Locataire') return 3;
+                if (val === 'Propriétaire') return 8;
+            }
+            
+            if (currentStep === 3) {
+                let val = getSelectedValue('q3');
+                if (!val) return null;
+                if (val === 'Logement neuf') return 4;
+                if (val === 'Logement ancien') return 5;
+            }
+            
+            if (currentStep === 4) {
+                let val = getSelectedValue('q4');
+                if (!val) return null;
+                if (val === 'Mise en service standard (sous 10 jours ouvrés)') return 'ty1';
+                if (val === 'Mise en service express (sous 5 jours ouvrés)') return 'ty2';
+            }
+            
+            if (currentStep === 5) {
+                let val = getSelectedValue('q5');
+                if (!val) return null;
+                if (val === 'Compteur mécanique (ancienne génération)') return 6;
+                if (val === 'Compteur communicant Linky') return 7;
+            }
+            
+            if (currentStep === 6) {
+                let val = getSelectedValue('q6');
+                if (!val) return null;
+                if (val === 'Mise en service standard (sous 5 jours ouvrés)') return 'ty5';
+                if (val === 'Mise en service express (sous 2 jours ouvrés)') return 'ty6';
+                if (val === "Mise en service d'urgence (le jour même)") return 'ty7';
+            }
+            
+            if (currentStep === 7) {
+                let val = getSelectedValue('q7');
+                if (!val) return null;
+                if (val === 'Mise en service standard (sous 24h)') return 'ty3';
+                if (val === "Mise en service d'urgence (le jour même)") return 'ty4';
+            }
+            
+            if (currentStep === 8) {
+                let val = getSelectedValue('q8');
+                if (!val) return null;
+                if (val === 'Logement neuf') return 'ty8';
+                if (val === 'Logement ancien') return 'ty9';
+            }
+            
+            return null;
+        }
+
+        function navigateForward() {
+            let current = historyStack[historyStack.length - 1];
+            let next = getNextStepOrResult(current);
+            
+            if (!next) return; 
+
+            if (typeof next === 'string' && next.startsWith('ty')) {
+                showThankYouScreen(next);
+            } else {
+                historyStack.push(next);
+                renderCurrentStep();
+            }
+        }
+
+        function navigateBackward() {
+            if (historyStack.length > 1) {
+                historyStack.pop(); 
+                renderCurrentStep();
+            }
+        }
+
+        function renderCurrentStep() {
+            document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
+            document.querySelector('.final-screen').classList.remove('active');
+            document.querySelector('.progress-bar-container').style.display = 'block';
+
+            let current = historyStack[historyStack.length - 1];
+            document.querySelector(`.step[data-step="${current}"]`).classList.add('active');
+
+            document.querySelectorAll('.nav-btn-prev').forEach(btn => {
+                btn.disabled = (historyStack.length === 1);
+            });
+
+            let progress = Math.min((historyStack.length / maxDepth) * 100, 100);
+            document.getElementById('progress-bar').style.width = progress + '%';
+            
+            /* MODIFICATION : On redimensionne l'iframe à chaque affichage d'étape */
+            sendHeightToParent();
+        }
+
+        const thankYouScreens = {
+            'ty1': {
+                title: "Si votre logement est neuf et que vous souhaitez le mettre à la location, vous devez vous assurer que le raccordement au réseau a bien été fait. Vous devez faire la demande de raccordement auprès d'Enedis et vous charger des frais.",
+                desc: "Les frais de mise en service de compteur seront ajoutés à ta première facture d'électricité."
+            },
+            'ty2': {
+                title: "Votre mise en service est estimée à 90,43€",
+                desc: "Les frais de mise en service de compteur seront ajoutés à votre première facture d'électricité."
+            },
+            'ty3': {
+                title: "Votre mise en service est estimée à 1,66 €",
+                desc: "Les frais de mise en service de compteur seront ajoutés à votre première facture d'électricité."
+            },
+            'ty4': {
+                title: "Votre mise en service est estimée à 13,94 €",
+                desc: "Les frais de mise en service de compteur seront ajoutés à votre première facture d'électricité."
+            },
+            'ty5': {
+                title: "Votre mise en service est estimée à 28,84 €",
+                desc: "Les frais de mise en service de compteur seront ajoutés à votre première facture d'électricité."
+            },
+            'ty6': {
+                title: "Votre mise en service est estimée à 76,16 €",
+                desc: "Les frais de mise en service de compteur seront ajoutés à votre première facture d'électricité."
+            },
+            'ty7': {
+                title: "Votre mise en service est estimée à 183,82€",
+                desc: "Les frais de mise en service de compteur seront ajoutés à votre première facture d'électricité."
+            },
+            'ty8': {
+                title: "Si votre logement est neuf et que vous souhaitez le mettre à la location, vous devez vous assurer que le raccordement au réseau a bien été fait. Vous devez faire la demande de raccordement auprès d'Enedis et vous charger des frais.",
+                desc: "Par contre, les frais de mise en service du compteur sont à la charge de vos futurs locataires."
+            },
+            'ty9': {
+                title: "Si votre logement est ancien et que vous souhaitez le mettre à la location, vous n'avez aucuns frais à votre charge concernant l'ouverture du compteur. C'est à vos locataires de s'en charger.",
+                desc: ""
+            }
+        };
+
+        function showThankYouScreen(tyId) {
+            document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
+            document.querySelector('.progress-bar-container').style.display = 'none';
+
+            const tyData = thankYouScreens[tyId];
+            document.getElementById('final-title').innerText = tyData.title;
+            
+            // Masque la description si elle est vide
+            const descElement = document.getElementById('final-desc');
+            if(tyData.desc) {
+                descElement.innerText = tyData.desc;
+                descElement.style.display = 'block';
+            } else {
+                descElement.style.display = 'none';
+            }
+
+            document.querySelector('.final-screen').classList.add('active');
+            
+            /* MODIFICATION : On redimensionne l'iframe à l'écran de fin également */
+            sendHeightToParent();
+        }
+
+        renderCurrentStep();
+        
+        /* MODIFICATION : On calcule la taille dès que la page est entièrement chargée */
+        window.addEventListener('load', sendHeightToParent);
+
+    </script>
+</body>
+</html>
