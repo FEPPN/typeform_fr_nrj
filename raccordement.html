@@ -18,7 +18,6 @@
             --bg-body: #F9FAFB;
         }
 
-        /* MODIFICATION : Fond transparent et retrait du centrage forcé en hauteur */
         body {
             font-family: 'Inter', sans-serif;
             background-color: transparent; 
@@ -27,7 +26,6 @@
             padding: 10px;
         }
 
-        /* MODIFICATION : Ajout de margin: 0 auto pour centrer horizontalement */
         .container {
             width: 100%;
             max-width: 700px;
@@ -184,7 +182,15 @@
             transition: background-color 0.2s;
             font-family: inherit;
         }
-        .btn-ok:hover { background-color: var(--papernest-blue-hover); }
+        .btn-ok:hover:not(:disabled) { background-color: var(--papernest-blue-hover); }
+
+        /* NOUVEAU : On grise le bouton Ok quand il est désactivé */
+        .btn-ok:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            background-color: var(--border-color);
+            color: var(--text-muted);
+        }
 
         /* Flèches de navigation */
         .nav-arrows {
@@ -246,7 +252,7 @@
             .container { 
                 padding: 30px 20px; 
                 width: calc(100% - 32px); 
-                margin: 16px auto; /* Ajout de auto pour le centrage mobile */
+                margin: 16px auto; 
                 border-radius: 12px; 
             }
             .question-title { font-size: 20px; }
@@ -399,7 +405,6 @@
         let historyStack = [1];
         const maxDepth = 5; 
 
-        /* MODIFICATION : Fonction pour envoyer la hauteur à la page principale */
         function sendHeightToParent() {
             setTimeout(() => {
                 const container = document.getElementById('typeform-container');
@@ -410,11 +415,50 @@
             }, 50); 
         }
 
+        // NOUVEAU : Vérifie si la question actuelle a une réponse
+        function validerEtapeActuelle() {
+            const etapeActuelle = document.querySelector('.step.active');
+            if (!etapeActuelle) return true;
+
+            const conteneurChoix = etapeActuelle.querySelector('.choices-container');
+            // S'il y a des choix à faire, on vérifie qu'au moins 1 est sélectionné
+            if (conteneurChoix) {
+                const choixSelectionnes = conteneurChoix.querySelectorAll('.choice-btn.selected');
+                if (choixSelectionnes.length === 0) {
+                    return false; // Bloque si rien n'est sélectionné
+                }
+            }
+
+            return true; // S'il n'y a pas de choix (ex: écran d'accueil), c'est valide
+        }
+
+        // NOUVEAU : Grise ou active les boutons suivant la validité
+        function mettreAJourBoutonsSuivant() {
+            const etapeActuelle = document.querySelector('.step.active');
+            if (!etapeActuelle) return;
+
+            let estValide = true;
+
+            const conteneurChoix = etapeActuelle.querySelector('.choices-container');
+            if (conteneurChoix) {
+                const choixSelectionnes = conteneurChoix.querySelectorAll('.choice-btn.selected');
+                estValide = choixSelectionnes.length > 0; 
+            }
+
+            const flecheDroite = etapeActuelle.querySelector('.nav-btn-next');
+            const boutonOk = etapeActuelle.querySelector('.btn-ok');
+
+            if (flecheDroite) flecheDroite.disabled = !estValide;
+            if (boutonOk) boutonOk.disabled = !estValide;
+        }
+
         function selectChoice(button, containerId) {
             const buttons = document.querySelectorAll(`#${containerId} .choice-btn`);
             buttons.forEach(btn => btn.classList.remove('selected'));
             button.classList.add('selected');
             
+            mettreAJourBoutonsSuivant(); // NOUVEAU : Met à jour les boutons instantanément
+
             setTimeout(() => { navigateForward(); }, 300); 
         }
 
@@ -480,6 +524,11 @@
         }
 
         function navigateForward() {
+            // NOUVEAU : On empêche l'avancée si la question n'est pas validée
+            if (!validerEtapeActuelle()) {
+                return;
+            }
+
             let current = historyStack[historyStack.length - 1];
             let next = getNextStepOrResult(current);
             
@@ -515,8 +564,10 @@
             let progress = Math.min((historyStack.length / maxDepth) * 100, 100);
             document.getElementById('progress-bar').style.width = progress + '%';
             
-            /* MODIFICATION : On redimensionne l'iframe à chaque affichage d'étape */
             sendHeightToParent();
+            
+            // NOUVEAU : On grise immédiatement les boutons à l'arrivée sur la nouvelle page
+            mettreAJourBoutonsSuivant();
         }
 
         const thankYouScreens = {
@@ -565,7 +616,6 @@
             const tyData = thankYouScreens[tyId];
             document.getElementById('final-title').innerText = tyData.title;
             
-            // Masque la description si elle est vide
             const descElement = document.getElementById('final-desc');
             if(tyData.desc) {
                 descElement.innerText = tyData.desc;
@@ -576,14 +626,16 @@
 
             document.querySelector('.final-screen').classList.add('active');
             
-            /* MODIFICATION : On redimensionne l'iframe à l'écran de fin également */
             sendHeightToParent();
         }
 
         renderCurrentStep();
         
-        /* MODIFICATION : On calcule la taille dès que la page est entièrement chargée */
-        window.addEventListener('load', sendHeightToParent);
+        window.addEventListener('load', () => {
+            sendHeightToParent();
+            // NOUVEAU : On force la vérification initiale au chargement (pas d'impact sur l'accueil, mais utile par sécurité)
+            mettreAJourBoutonsSuivant();
+        });
 
     </script>
 </body>
