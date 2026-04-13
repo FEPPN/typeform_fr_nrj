@@ -416,6 +416,12 @@
         }
 
         function navigate(direction) {
+            if (direction === 1) {
+                if (!validerEtapeActuelle()) {
+                    // Optionnel : vous pouvez ajouter un petit message ou un effet visuel ici
+                    return; // Stoppe la navigation net !
+                }
+            }
             if (currentStepIndex === totalSteps && direction === 1) {
                 calculerScoreFinal();
                 return;
@@ -436,6 +442,31 @@
 
             updateProgressBar();
             sendHeightToParent();
+        }
+
+        // Nouvelle fonction : Vérifie si la question actuelle a une réponse
+        function validerEtapeActuelle() {
+            const etapeActuelle = document.querySelector('.step.active');
+            if (!etapeActuelle) return true;
+
+            // 1. Vérification s'il y a un champ de saisie (texte ou nombre)
+            const champSaisie = etapeActuelle.querySelector('input');
+            if (champSaisie) {
+                if (champSaisie.value.trim() === '') {
+                    return false; // Bloque si c'est vide
+                }
+            }
+
+            // 2. Vérification s'il y a des choix multiples
+            const conteneurChoix = etapeActuelle.querySelector('.choices-container');
+            if (conteneurChoix) {
+                const choixSelectionnes = conteneurChoix.querySelectorAll('.choice-btn.selected');
+                if (choixSelectionnes.length === 0) {
+                    return false; // Bloque si aucun choix n'est fait
+                }
+            }
+
+            return true; // Tout est bon, on peut passer à la suite !
         }
 
         // --- MATHÉMATIQUES DU SCORE (JSON) ---
