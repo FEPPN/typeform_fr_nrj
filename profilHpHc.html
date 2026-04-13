@@ -186,6 +186,13 @@
         }
         .btn-ok:hover { background-color: var(--papernest-blue-hover); }
 
+        .btn-ok:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            background-color: var(--border-color);
+            color: var(--text-muted);
+        }
+
         /* Flèches de navigation */
         .nav-arrows {
             display: flex;
@@ -388,6 +395,34 @@
             }, 50); 
         }
 
+        // Fonction qui vérifie la question et grise/dégrise les boutons
+        function mettreAJourBoutonsSuivant() {
+            const etapeActuelle = document.querySelector('.step.active');
+            if (!etapeActuelle) return;
+
+            let estValide = true;
+
+            // 1. On regarde s'il y a un champ de texte/nombre
+            const champInput = etapeActuelle.querySelector('input');
+            if (champInput) {
+                estValide = champInput.value.trim() !== ''; // Valide si non vide
+            }
+
+            // 2. On regarde s'il y a des boutons de choix
+            const conteneurChoix = etapeActuelle.querySelector('.choices-container');
+            if (conteneurChoix) {
+                const choixSelectionnes = conteneurChoix.querySelectorAll('.choice-btn.selected');
+                estValide = choixSelectionnes.length > 0; // Valide si au moins 1 choix cliqué
+            }
+
+            // 3. On applique l'état (grisé ou actif) à la flèche de droite et au bouton Ok
+            const flecheDroite = etapeActuelle.querySelector('.nav-btn-next');
+            const boutonOk = etapeActuelle.querySelector('.btn-ok');
+
+            if (flecheDroite) flecheDroite.disabled = !estValide;
+            if (boutonOk) boutonOk.disabled = !estValide;
+        }
+        
         function updateProgressBar() {
             const pbContainer = document.getElementById('pb-container');
             if (currentStepIndex === 0 || currentStepIndex === 'final') {
@@ -401,13 +436,15 @@
 
         function toggleChoice(button) {
             button.classList.toggle('selected');
+            mettreAJourBoutonsSuivant();
         }
 
         function selectSingleChoice(button, containerId) {
             const buttons = document.querySelectorAll(`#${containerId} .choice-btn`);
             buttons.forEach(btn => btn.classList.remove('selected'));
             button.classList.add('selected');
-            setTimeout(() => { navigate(1); }, 300); 
+            setTimeout(() => { navigate(1); }, 300);
+            mettreAJourBoutonsSuivant();
         }
 
         function getSelectedValues(containerId) {
@@ -442,6 +479,7 @@
 
             updateProgressBar();
             sendHeightToParent();
+            mettreAJourBoutonsSuivant();
         }
 
         // Nouvelle fonction : Vérifie si la question actuelle a une réponse
@@ -546,7 +584,7 @@
         }
 
         window.addEventListener('load', sendHeightToParent);
-
+        mettreAJourBoutonsSuivant();
     </script>
 </body>
 </html>
