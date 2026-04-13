@@ -265,7 +265,7 @@
         </div>
 
         <div class="step active welcome-screen" data-step="0">
-            <h2>💰 <b>Faites le test et économisez</b> sur vos factures d'énergie 💰</h2>
+            <h2><b>Faites le test et économisez</b> sur vos factures d'énergie</h2>
             <p>Découvrez en 5 clics si l’option Heures Pleines / Heures Creuses est faite pour vous !</p>
             <button class="btn-ok" onclick="navigate(1)">Commencer</button>
         </div>
@@ -495,16 +495,16 @@
             // Mapping des résultats selon le score du JSON
             if (score <= 8) {
                 // Pas adapté
-                title = "<b>🧐 Un contrat heures creuses n'est probablement pas adapté...</b>";
-                desc = "Mais pas de panique, d’autres options pourraient vous convenir !<br><br>Pour les découvrir, appelez papernest<br>📞 <b>09 70 25 21 49</b>";
+                title = "<b>Un contrat heures creuses n'est probablement pas adapté...</b>";
+                desc = "Mais pas de panique, d’autres options pourraient vous convenir !</b>";
             } else if (score <= 19) {
                 // Peut être rentable
-                title = "<span style='color: #F59E0B;'>💡</span> <b>Cela peut être rentable si vous modifiez légèrement vos habitudes :</b>";
-                desc = "En utilisant vos appareils électriques pendant les heures creuses ou en les programmant la nuit.<br><br>Discutez-en avec un conseiller papernest<br>📞 <b>09 70 25 21 49</b>";
+                title = "<b>Cela peut être rentable si vous modifiez légèrement vos habitudes :</b>";
+                desc = "En utilisant vos appareils électriques pendant les heures creuses ou en les programmant la nuit.</b>";
             } else {
                 // Bon profil (20 et +)
-                title = "<span style='color: #10B981;'>✅</span> <b>Vous avez le bon profil pour profiter de l’option Heures Creuses !</b>";
-                desc = "La plupart de votre consommation est concentrée en heures creuses.<br><br>Contactez dès maintenant papernest pour trouver l'offre qui vous convient et faire des économies !<br><br>📞 <b>09 70 25 21 49</b>";
+                title = "<b>Vous avez le bon profil pour profiter de l’option Heures Creuses !</b>";
+                desc = "La plupart de votre consommation est concentrée en heures creuses.";
             }
 
             document.getElementById('final-title').innerHTML = title;
