@@ -204,6 +204,12 @@
             font-family: inherit;
         }
         .btn-ok:hover { background-color: var(--papernest-blue-hover); }
+        .btn-ok:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            background-color: var(--border-color);
+            color: var(--text-muted);
+        }
 
         /* Flèches de navigation */
         .nav-arrows {
@@ -393,13 +399,15 @@
 
         function toggleChoice(button) {
             button.classList.toggle('selected');
+            mettreAJourBoutonsSuivant();
         }
 
         function selectSingleChoice(button, containerId) {
             const buttons = document.querySelectorAll(`#${containerId} .choice-btn`);
             buttons.forEach(btn => btn.classList.remove('selected'));
             button.classList.add('selected');
-            setTimeout(() => { navigate(1); }, 300); 
+            setTimeout(() => { navigate(1); }, 300);
+            mettreAJourBoutonsSuivant();
         }
 
         function getSelectedValues(containerId) {
@@ -407,7 +415,65 @@
             return Array.from(selected).map(btn => btn.innerText.substring(2).trim());
         }
 
+        // Nouvelle fonction : Vérifie si la question actuelle a une réponse
+        function validerEtapeActuelle() {
+            const etapeActuelle = document.querySelector('.step.active');
+            if (!etapeActuelle) return true;
+
+            // 1. Vérification s'il y a un champ de saisie (texte ou nombre)
+            const champSaisie = etapeActuelle.querySelector('input');
+            if (champSaisie) {
+                if (champSaisie.value.trim() === '') {
+                    return false; // Bloque si c'est vide
+                }
+            }
+
+            // 2. Vérification s'il y a des choix multiples
+            const conteneurChoix = etapeActuelle.querySelector('.choices-container');
+            if (conteneurChoix) {
+                const choixSelectionnes = conteneurChoix.querySelectorAll('.choice-btn.selected');
+                if (choixSelectionnes.length === 0) {
+                    return false; // Bloque si aucun choix n'est fait
+                }
+            }
+
+            return true; // Tout est bon, on peut passer à la suite !
+        }
+
+        function mettreAJourBoutonsSuivant() {
+            const etapeActuelle = document.querySelector('.step.active');
+            if (!etapeActuelle) return;
+
+            let estValide = true;
+
+            // 1. On regarde s'il y a un champ de texte/nombre
+            const champInput = etapeActuelle.querySelector('input');
+            if (champInput) {
+                estValide = champInput.value.trim() !== ''; // Valide si non vide
+            }
+
+            // 2. On regarde s'il y a des boutons de choix
+            const conteneurChoix = etapeActuelle.querySelector('.choices-container');
+            if (conteneurChoix) {
+                const choixSelectionnes = conteneurChoix.querySelectorAll('.choice-btn.selected');
+                estValide = choixSelectionnes.length > 0; // Valide si au moins 1 choix cliqué
+            }
+
+            // 3. On applique l'état (grisé ou actif) à la flèche de droite et au bouton Ok
+            const flecheDroite = etapeActuelle.querySelector('.nav-btn-next');
+            const boutonOk = etapeActuelle.querySelector('.btn-ok');
+
+            if (flecheDroite) flecheDroite.disabled = !estValide;
+            if (boutonOk) boutonOk.disabled = !estValide;
+        }
+        
         function navigate(direction) {
+            if (direction === 1) {
+                if (!validerEtapeActuelle()) {
+                    // Optionnel : vous pouvez ajouter un petit message ou un effet visuel ici
+                    return; // Stoppe la navigation net !
+                }
+            }
             if (currentStepIndex === totalSteps && direction === 1) {
                 calculerScoreFinal();
                 return;
@@ -426,9 +492,8 @@
             });
 
             updateProgressBar();
-
-            /* MODIFICATION : Appel de la fonction à chaque navigation */
             sendHeightToParent();
+            mettreAJourBoutonsSuivant();
         }
 
         function calculerScoreFinal() {
@@ -476,16 +541,20 @@
         }
 
         document.querySelectorAll('.input-text').forEach((input) => {
+            // Si on tape Entrée
             input.addEventListener('keypress', function(e) {
-                if (e.key === 'Enter') {
-                    navigate(1);
+                // On vérifie que le bouton n'est pas désactivé avant de passer à la suite
+                if (e.key === 'Enter' && !document.querySelector('.step.active .btn-ok').disabled) {
+                    navigate(1); // ou navigateForward() selon le formulaire
                 }
             });
+            // NOUVEAU : À chaque lettre tapée, on vérifie si on dégrise le bouton
+            input.addEventListener('input', mettreAJourBoutonsSuivant);
         });
 
         /* MODIFICATION : Initialisation au chargement */
         window.addEventListener('load', sendHeightToParent);
-
+        mettreAJourBoutonsSuivant();
     </script>
 </body>
 </html>
