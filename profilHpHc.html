@@ -272,8 +272,9 @@
         </div>
 
         <div class="step active welcome-screen" data-step="0">
-            <h2><b>Faites le test et économisez</b> sur vos factures d'énergie</h2>
-            <p>Découvrez en 5 clics si l’option Heures Pleines / Heures Creuses est faite pour vous !</p>
+            <h2>Découvrez en 5 clics si l’option Heures Pleines / Heures Creuses est faite pour vous !</h2>
+            <p><b>Faites le test et économisez</b> sur vos factures d'énergie</p>
+            
             <button class="btn-ok" onclick="navigate(1)">Commencer</button>
         </div>
 
@@ -304,6 +305,7 @@
                 <button class="choice-btn" onclick="toggleChoice(this)"><span class="choice-letter">D</span> Sèche-linge</button>
                 <button class="choice-btn" onclick="toggleChoice(this)"><span class="choice-letter">E</span> Lave-vaisselle</button>
                 <button class="choice-btn" onclick="toggleChoice(this)"><span class="choice-letter">F</span> Voiture électrique</button>
+                <button class="choice-btn" onclick="toggleChoice(this)"><span class="choice-letter">G</span> Aucun</button>
             </div>
             
             <div class="actions-row">
@@ -373,7 +375,7 @@
         <div class="step final-screen" data-step="final">
             <h2 id="final-title">Titre dynamique</h2>
             <p id="final-desc">Description dynamique</p>
-            <a href="https://www.papernest.com/demarches-energie/" target="_top" class="btn-ok" style="text-decoration: none; display: inline-block; text-align: center; box-sizing: border-box;">
+            <a href="https://www.papernest.com/demarches-energie/fournisseurs/" target="_top" class="btn-ok" style="text-decoration: none; display: inline-block; text-align: center; box-sizing: border-box;">
                 Découvrir nos offres
             </a>
         </div>
@@ -530,6 +532,7 @@
             if (q2.includes('Lave-vaisselle')) score += 2;
             if (q2.includes('Sèche-linge')) score += 2;
             if (q2.includes('Chauffage électrique')) score += 1;
+            if (q2.includes('Aucun')) score += 0;
 
             // Q3
             if (q3.includes('Chauffe-eau électrique')) score += 3;
