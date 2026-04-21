@@ -295,13 +295,13 @@
         <div class="step active" data-step="1">
             <h2 class="question-title"><span class="q-number">1.</span> Quelle est la surface de votre logement en m2 ?</h2>
             <div class="question-desc">Écrire en chiffre</div>
-            <input type="number" onfocus="tracktool('q1_reponse')" id="q1" class="input-text" placeholder="Saisissez votre réponse ici...">
+            <input type="number" onfocus="trackTool('q1_reponse')" id="q1" class="input-text" placeholder="Saisissez votre réponse ici...">
             
             <div class="actions-row">
-                <button class="btn-ok" onclick="tracktool('btn_q1_ok'); navigate(1)">Ok</button>
+                <button class="btn-ok" onclick="trackTool('btn_q1_ok'); navigate(1)">Ok</button>
                 <div class="nav-arrows">
-                    <button class="nav-btn nav-btn-prev" onclick="tracktool('fleche_arriere'); navigate(-1)" disabled>&#8592;</button>
-                    <button class="nav-btn nav-btn-next" onclick="tracktool('fleche_avant'); navigate(1)">&#8594;</button>
+                    <button class="nav-btn nav-btn-prev" onclick="trackTool('fleche_arriere'); navigate(-1)" disabled>&#8592;</button>
+                    <button class="nav-btn nav-btn-next" onclick="trackTool('fleche_avant'); navigate(1)">&#8594;</button>
                 </div>
             </div>
         </div>
@@ -309,13 +309,13 @@
         <div class="step" data-step="2">
             <h2 class="question-title"><span class="q-number">2.</span> Combien de personnes habitent dans votre logement ?</h2>
             <div class="question-desc">Écrire en chiffre</div>
-            <input type="number" id="q2" onfocus="tracktool('q2_reponse')" class="input-text" placeholder="Saisissez votre réponse ici...">
+            <input type="number" id="q2" onfocus="trackTool('q2_reponse')" class="input-text" placeholder="Saisissez votre réponse ici...">
             
             <div class="actions-row">
-                <button class="btn-ok" onclick="tracktool('btn_q2_ok'); navigate(1)">Ok</button>
+                <button class="btn-ok" onclick="trackTool('btn_q2_ok'); navigate(1)">Ok</button>
                 <div class="nav-arrows">
-                    <button class="nav-btn nav-btn-prev" onclick="tracktool('fleche_arriere'); navigate(-1)" disabled>&#8592;</button>
-                    <button class="nav-btn nav-btn-next" onclick="tracktool('fleche_avant'); navigate(1)">&#8594;</button>
+                    <button class="nav-btn nav-btn-prev" onclick="trackTool('fleche_arriere'); navigate(-1)" disabled>&#8592;</button>
+                    <button class="nav-btn nav-btn-next" onclick="trackTool('fleche_avant'); navigate(1)">&#8594;</button>
                 </div>
             </div>
         </div>
@@ -324,17 +324,17 @@
             <h2 class="question-title"><span class="q-number">3.</span> Quels sont vos principaux équipements qui utilisent le gaz ?</h2>
             <div class="question-desc">Choisissez-en autant que vous voulez</div>
             <div class="choices-container grid-1" id="q3">
-                <button class="choice-btn" onclick="tracktool('q3_a'); toggleChoice(this)"><span class="choice-letter">A</span> Chauffage</button>
-                <button class="choice-btn" onclick="tracktool('q3_b'); toggleChoice(this)"><span class="choice-letter">B</span> Eau chaude</button>
-                <button class="choice-btn" onclick="tracktool('q3_c'); toggleChoice(this)"><span class="choice-letter">C</span> Cuisson</button>
-                <button class="choice-btn" onclick="tracktool('q3_d'); toggleChoice(this)"><span class="choice-letter">D</span> Aucun</button>
+                <button class="choice-btn" onclick="trackTool('q3_a'); toggleChoice(this)"><span class="choice-letter">A</span> Chauffage</button>
+                <button class="choice-btn" onclick="trackTool('q3_b'); toggleChoice(this)"><span class="choice-letter">B</span> Eau chaude</button>
+                <button class="choice-btn" onclick="trackTool('q3_c'); toggleChoice(this)"><span class="choice-letter">C</span> Cuisson</button>
+                <button class="choice-btn" onclick="trackTool('q3_d'); toggleChoice(this)"><span class="choice-letter">D</span> Aucun</button>
             </div>
             
             <div class="actions-row">
-                <button class="btn-ok" onclick="tracktool('btn_q3_ok'); navigate(1)">Ok</button>
+                <button class="btn-ok" onclick="trackTool('btn_q3_ok'); navigate(1)">Ok</button>
                 <div class="nav-arrows">
-                    <button class="nav-btn nav-btn-prev" onclick="tracktool('fleche_arriere'); navigate(-1)" disabled>&#8592;</button>
-                    <button class="nav-btn nav-btn-next" onclick="tracktool('fleche_avant'); navigate(1)">&#8594;</button>
+                    <button class="nav-btn nav-btn-prev" onclick="trackTool('fleche_arriere'); navigate(-1)" disabled>&#8592;</button>
+                    <button class="nav-btn nav-btn-next" onclick="trackTool('fleche_avant'); navigate(1)">&#8594;</button>
                 </div>
             </div>
         </div>
@@ -342,16 +342,16 @@
         <div class="step" data-step="4">
             <h2 class="question-title"><span class="q-number">4.</span> Si vous utilisez le gaz pour le chauffage, quel est votre type de chauffage ?</h2>
             <div class="choices-container grid-1" id="q4">
-                <button class="choice-btn" onclick="tracktool('q4_a'); toggleChoice(this)"><span class="choice-letter">A</span> Chauffage individuel (chaudière)</button>
-                <button class="choice-btn" onclick="tracktool('q4_b'); toggleChoice(this)"><span class="choice-letter">B</span> Chauffage collectif</button>
-                <button class="choice-btn" onclick="tracktool('q4_c'); toggleChoice(this)"><span class="choice-letter">C</span> Je n'utilise pas le gaz pour me chauffer</button>
+                <button class="choice-btn" onclick="trackTool('q4_a'); toggleChoice(this)"><span class="choice-letter">A</span> Chauffage individuel (chaudière)</button>
+                <button class="choice-btn" onclick="trackTool('q4_b'); toggleChoice(this)"><span class="choice-letter">B</span> Chauffage collectif</button>
+                <button class="choice-btn" onclick="trackTool('q4_c'); toggleChoice(this)"><span class="choice-letter">C</span> Je n'utilise pas le gaz pour me chauffer</button>
             </div>
             
             <div class="actions-row">
-                <button class="btn-ok" onclick="tracktool('btn_q4_ok'); navigate(1)">Ok</button>
+                <button class="btn-ok" onclick="trackTool('btn_q4_ok'); navigate(1)">Ok</button>
                 <div class="nav-arrows">
-                    <button class="nav-btn nav-btn-prev" onclick="tracktool('fleche_arriere'); navigate(-1)" disabled>&#8592;</button>
-                    <button class="nav-btn nav-btn-next" onclick="tracktool('fleche_avant'); navigate(1)">&#8594;</button>
+                    <button class="nav-btn nav-btn-prev" onclick="trackTool('fleche_arriere'); navigate(-1)" disabled>&#8592;</button>
+                    <button class="nav-btn nav-btn-next" onclick="trackTool('fleche_avant'); navigate(1)">&#8594;</button>
                 </div>
             </div>
         </div>
@@ -360,16 +360,16 @@
             <h2 class="question-title"><span class="q-number">5.</span> Votre logement est-il bien isolé ?</h2>
             <div class="question-desc">Veuillez faire un seul choix</div>
             <div class="choices-container grid-1" id="q5">
-                <button class="choice-btn single-choice" onclick="tracktool('q5_a'); selectSingleChoice(this, 'q5')"><span class="choice-letter">A</span> Oui, très bien isolé</button>
-                <button class="choice-btn single-choice" onclick="tracktool('q5_b'); selectSingleChoice(this, 'q5')"><span class="choice-letter">B</span> Assez bien isolé</button>
-                <button class="choice-btn single-choice" onclick="tracktool('q5_c'); selectSingleChoice(this, 'q5')"><span class="choice-letter">C</span> Pas très bien isolé</button>
-                <button class="choice-btn single-choice" onclick="tracktool('q5_d'); selectSingleChoice(this, 'q5')"><span class="choice-letter">D</span> Pas isolé</button>
+                <button class="choice-btn single-choice" onclick="trackTool('q5_a'); selectSingleChoice(this, 'q5')"><span class="choice-letter">A</span> Oui, très bien isolé</button>
+                <button class="choice-btn single-choice" onclick="trackTool('q5_b'); selectSingleChoice(this, 'q5')"><span class="choice-letter">B</span> Assez bien isolé</button>
+                <button class="choice-btn single-choice" onclick="trackTool('q5_c'); selectSingleChoice(this, 'q5')"><span class="choice-letter">C</span> Pas très bien isolé</button>
+                <button class="choice-btn single-choice" onclick="trackTool('q5_d'); selectSingleChoice(this, 'q5')"><span class="choice-letter">D</span> Pas isolé</button>
             </div>
             
             <div class="actions-row" style="justify-content: flex-end;">
                 <div class="nav-arrows">
-                    <button class="nav-btn nav-btn-prev" onclick="tracktool('fleche_arriere'); navigate(-1)" disabled>&#8592;</button>
-                    <button class="nav-btn nav-btn-next" onclick="tracktool('fleche_avant'); navigate(1)">&#8594;</button>
+                    <button class="nav-btn nav-btn-prev" onclick="trackTool('fleche_arriere'); navigate(-1)" disabled>&#8592;</button>
+                    <button class="nav-btn nav-btn-next" onclick="trackTool('fleche_avant'); navigate(1)">&#8594;</button>
                 </div>
             </div>
         </div>
@@ -377,8 +377,8 @@
         <div class="step final-screen" data-step="final">
             <h2 id="final-score-text">Votre consommation moyenne est de 0 kWh/an.</h2>
             <p>Les conseillers papernest vous accompagnent si vous souhaitez faire des économies sur votre facture.</p>
-            <button class="btn-ok" onclick="tracktool('btn_recommencer'); location.reload()">Refaire une estimation</button>
-            <button class="btn-ok" onclick="tracktool('btn_to_tarifgaz'); window.top.location.href='https://www.papernest.com/demarches-energie/prix-gaz/tarif/'">Trouver votre offre</button>
+            <button class="btn-ok" onclick="trackTool('btn_recommencer'); location.reload()">Refaire une estimation</button>
+            <button class="btn-ok" onclick="trackTool('btn_to_tarifgaz'); window.top.location.href='https://www.papernest.com/demarches-energie/prix-gaz/tarif/'">Trouver votre offre</button>
         </div>
 
     </div>
