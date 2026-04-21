@@ -400,7 +400,7 @@
             <h2 id="final-score-text">Votre consommation moyenne est de 0 kWh/an.</h2>
             <p>Les conseillers papernest vous accompagnent si vous souhaitez faire des économies sur votre facture.</p>
             <button class="btn-ok" onclick="location.reload()">Refaire une estimation</button>
-            <button class="btn-ok" id="redirection-btn" onclick="location.href = 'https://www.papernest.com/demarches-energie/'">Comparer les offres</button>
+            <button class="btn-ok" id="redirection-btn" onclick="location.href = 'https://www.papernest.com/demarches-energie/comparateur/'">Comparer les offres</button>
         </div>
 
     </div>
@@ -571,7 +571,7 @@
 
             document.getElementById('final-score-text').innerText = `Votre consommation moyenne est de ${score} kWh/an.`;
             document.getElementById('redirection-btn').addEventListener("click",function(){
-                window.parent.location.href = `https://www.papernest.com/demarches-energie/comparateur/?power_rating=6&contract_type=base&yearly_usage_in_kwh=${score}`;
+                window.top.location.href = `https://www.papernest.com/demarches-energie/comparateur/?power_rating=6&contract_type=base&yearly_usage_in_kwh=${score}`;
             });
             document.querySelector(`.step[data-step="final"]`).classList.add('active');
 
