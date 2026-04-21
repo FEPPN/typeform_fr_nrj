@@ -265,7 +265,10 @@
             margin-left: auto;
             margin-right: auto;
         }
-        
+        .final-screen button {
+            margin: 5px;
+        }
+
         /* Ajustements pour mobiles */
         @media (max-width: 600px) {
             .container { 
@@ -324,6 +327,7 @@
                 <button class="choice-btn" onclick="toggleChoice(this)"><span class="choice-letter">A</span> Chauffage</button>
                 <button class="choice-btn" onclick="toggleChoice(this)"><span class="choice-letter">B</span> Eau chaude</button>
                 <button class="choice-btn" onclick="toggleChoice(this)"><span class="choice-letter">C</span> Cuisson</button>
+                <button class="choice-btn" onclick="toggleChoice(this)"><span class="choice-letter">D</span> Aucun</button>
             </div>
             
             <div class="actions-row">
@@ -340,6 +344,7 @@
             <div class="choices-container grid-1" id="q4">
                 <button class="choice-btn" onclick="toggleChoice(this)"><span class="choice-letter">A</span> Chauffage individuel (chaudière)</button>
                 <button class="choice-btn" onclick="toggleChoice(this)"><span class="choice-letter">B</span> Chauffage collectif</button>
+                <button class="choice-btn" onclick="toggleChoice(this)"><span class="choice-letter">C</span> Je n'utilise pas le gaz pour me chauffer</button>
             </div>
             
             <div class="actions-row">
@@ -372,7 +377,8 @@
         <div class="step final-screen" data-step="final">
             <h2 id="final-score-text">Votre consommation moyenne est de 0 kWh/an.</h2>
             <p>Les conseillers papernest vous accompagnent si vous souhaitez faire des économies sur votre facture.</p>
-            <button class="btn-ok" onclick="window.top.location.href='https://www.papernest.com/papernest-switch/'">Trouver votre offre</button>
+            <button class="btn-ok" onclick="location.reload()">Refaire une estimation</button>
+            <button class="btn-ok" onclick="window.top.location.href='https://www.papernest.com/demarches-energie/prix-gaz/tarif/'">Trouver votre offre</button>
         </div>
 
     </div>
