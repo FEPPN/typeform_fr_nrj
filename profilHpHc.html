@@ -275,23 +275,23 @@
             <h2>Découvrez en 5 clics si l’option Heures Pleines / Heures Creuses est faite pour vous !</h2>
             <p><b>Faites le test et économisez</b> sur vos factures d'énergie</p>
             
-            <button class="btn-ok" onclick="navigate(1)">Commencer</button>
+            <button class="btn-ok" onclick="trackTool('btn_commencer'); navigate(1)">Commencer</button>
         </div>
 
         <div class="step" data-step="1">
             <h2 class="question-title"><span class="q-number">1.</span> À quels moments de la journée consommez-vous le plus d’électricité ?</h2>
             <div class="choices-container grid-1" id="q1">
-                <button class="choice-btn single-choice" onclick="selectSingleChoice(this, 'q1')"><span class="choice-letter">A</span> Principalement la nuit ou tôt le matin</button>
-                <button class="choice-btn single-choice" onclick="selectSingleChoice(this, 'q1')"><span class="choice-letter">B</span> De manière équilibrée</button>
-                <button class="choice-btn single-choice" onclick="selectSingleChoice(this, 'q1')"><span class="choice-letter">C</span> Cela dépend des jours</button>
-                <button class="choice-btn single-choice" onclick="selectSingleChoice(this, 'q1')"><span class="choice-letter">D</span> Principalement la journée</button>
+                <button class="choice-btn single-choice" onclick="trackTool('q1_a'); selectSingleChoice(this, 'q1')"><span class="choice-letter">A</span> Principalement la nuit ou tôt le matin</button>
+                <button class="choice-btn single-choice" onclick="trackTool('q1_b'); selectSingleChoice(this, 'q1')"><span class="choice-letter">B</span> De manière équilibrée</button>
+                <button class="choice-btn single-choice" onclick="trackTool('q1_c'); selectSingleChoice(this, 'q1')"><span class="choice-letter">C</span> Cela dépend des jours</button>
+                <button class="choice-btn single-choice" onclick="trackTool('q1_d'); selectSingleChoice(this, 'q1')"><span class="choice-letter">D</span> Principalement la journée</button>
             </div>
             
             <div class="actions-row">
-                <button class="btn-ok" onclick="navigate(1)">Ok</button>
+                <button class="btn-ok" onclick="trackTool('btn_q1_ok'); navigate(1)">Ok</button>
                 <div class="nav-arrows">
-                    <button class="nav-btn nav-btn-prev" onclick="navigate(-1)">&#8592;</button>
-                    <button class="nav-btn nav-btn-next" onclick="navigate(1)">&#8594;</button>
+                    <button class="nav-btn nav-btn-prev" onclick="trackTool('fleche_arriere'); navigate(-1)">&#8592;</button>
+                    <button class="nav-btn nav-btn-next" onclick="trackTool('fleche_avant'); navigate(1)">&#8594;</button>
                 </div>
             </div>
         </div>
@@ -299,20 +299,20 @@
         <div class="step" data-step="2">
             <h2 class="question-title"><span class="q-number">2.</span> Quels appareils possédez-vous ?</h2>
             <div class="choices-container grid-1" id="q2">
-                <button class="choice-btn" onclick="toggleChoice(this)"><span class="choice-letter">A</span> Chauffe-eau électrique</button>
-                <button class="choice-btn" onclick="toggleChoice(this)"><span class="choice-letter">B</span> Chauffage électrique</button>
-                <button class="choice-btn" onclick="toggleChoice(this)"><span class="choice-letter">C</span> Machine à laver</button>
-                <button class="choice-btn" onclick="toggleChoice(this)"><span class="choice-letter">D</span> Sèche-linge</button>
-                <button class="choice-btn" onclick="toggleChoice(this)"><span class="choice-letter">E</span> Lave-vaisselle</button>
-                <button class="choice-btn" onclick="toggleChoice(this)"><span class="choice-letter">F</span> Voiture électrique</button>
-                <button class="choice-btn" onclick="toggleChoice(this)"><span class="choice-letter">G</span> Aucun</button>
+                <button class="choice-btn" onclick="trackTool('q2_a'); toggleChoice(this)"><span class="choice-letter">A</span> Chauffe-eau électrique</button>
+                <button class="choice-btn" onclick="trackTool('q2_b'); toggleChoice(this)"><span class="choice-letter">B</span> Chauffage électrique</button>
+                <button class="choice-btn" onclick="trackTool('q2_c'); toggleChoice(this)"><span class="choice-letter">C</span> Machine à laver</button>
+                <button class="choice-btn" onclick="trackTool('q2_d'); toggleChoice(this)"><span class="choice-letter">D</span> Sèche-linge</button>
+                <button class="choice-btn" onclick="trackTool('q2_e'); toggleChoice(this)"><span class="choice-letter">E</span> Lave-vaisselle</button>
+                <button class="choice-btn" onclick="trackTool('q2_f'); toggleChoice(this)"><span class="choice-letter">F</span> Voiture électrique</button>
+                <button class="choice-btn" onclick="trackTool('q2_g'); toggleChoice(this)"><span class="choice-letter">G</span> Aucun</button>
             </div>
             
             <div class="actions-row">
-                <button class="btn-ok" onclick="navigate(1)">Ok</button>
+                <button class="btn-ok" onclick="trackTool('btn_q2_ok'); navigate(1)">Ok</button>
                 <div class="nav-arrows">
-                    <button class="nav-btn nav-btn-prev" onclick="navigate(-1)">&#8592;</button>
-                    <button class="nav-btn nav-btn-next" onclick="navigate(1)">&#8594;</button>
+                    <button class="nav-btn nav-btn-prev" onclick="trackTool('fleche_arriere'); navigate(-1)">&#8592;</button>
+                    <button class="nav-btn nav-btn-next" onclick="trackTool('fleche_avant'); navigate(1)">&#8594;</button>
                 </div>
             </div>
         </div>
@@ -320,19 +320,19 @@
         <div class="step" data-step="3">
             <h2 class="question-title"><span class="q-number">3.</span> Lesquels de vos appareils sont programmables ?</h2>
             <div class="choices-container grid-1" id="q3">
-                <button class="choice-btn" onclick="toggleChoice(this)"><span class="choice-letter">A</span> Chauffe-eau électrique</button>
-                <button class="choice-btn" onclick="toggleChoice(this)"><span class="choice-letter">B</span> Chauffage électrique</button>
-                <button class="choice-btn" onclick="toggleChoice(this)"><span class="choice-letter">C</span> Machine à laver</button>
-                <button class="choice-btn" onclick="toggleChoice(this)"><span class="choice-letter">D</span> Sèche-linge</button>
-                <button class="choice-btn" onclick="toggleChoice(this)"><span class="choice-letter">E</span> Lave-vaisselle</button>
-                <button class="choice-btn" onclick="toggleChoice(this)"><span class="choice-letter">F</span> Aucun appareil programmable</button>
+                <button class="choice-btn" onclick="trackTool('q3_a'); toggleChoice(this)"><span class="choice-letter">A</span> Chauffe-eau électrique</button>
+                <button class="choice-btn" onclick="trackTool('q3_b'); toggleChoice(this)"><span class="choice-letter">B</span> Chauffage électrique</button>
+                <button class="choice-btn" onclick="trackTool('q3_c'); toggleChoice(this)"><span class="choice-letter">C</span> Machine à laver</button>
+                <button class="choice-btn" onclick="trackTool('q3_d'); toggleChoice(this)"><span class="choice-letter">D</span> Sèche-linge</button>
+                <button class="choice-btn" onclick="trackTool('q3_e'); toggleChoice(this)"><span class="choice-letter">E</span> Lave-vaisselle</button>
+                <button class="choice-btn" onclick="trackTool('q3_f'); toggleChoice(this)"><span class="choice-letter">F</span> Aucun appareil programmable</button>
             </div>
             
             <div class="actions-row">
-                <button class="btn-ok" onclick="navigate(1)">Ok</button>
+                <button class="btn-ok" onclick="trackTool('btn_q3_ok'); navigate(1)">Ok</button>
                 <div class="nav-arrows">
-                    <button class="nav-btn nav-btn-prev" onclick="navigate(-1)">&#8592;</button>
-                    <button class="nav-btn nav-btn-next" onclick="navigate(1)">&#8594;</button>
+                    <button class="nav-btn nav-btn-prev" onclick="trackTool('fleche_arriere'); navigate(-1)">&#8592;</button>
+                    <button class="nav-btn nav-btn-next" onclick="trackTool('fleche_avant'); navigate(1)">&#8594;</button>
                 </div>
             </div>
         </div>
@@ -340,17 +340,17 @@
         <div class="step" data-step="4">
             <h2 class="question-title"><span class="q-number">4.</span> Quel est le type de votre logement ?</h2>
             <div class="choices-container grid-1" id="q4">
-                <button class="choice-btn single-choice" onclick="selectSingleChoice(this, 'q4')"><span class="choice-letter">A</span> Appartement -50m²</button>
-                <button class="choice-btn single-choice" onclick="selectSingleChoice(this, 'q4')"><span class="choice-letter">B</span> Appartement + 50m²</button>
-                <button class="choice-btn single-choice" onclick="selectSingleChoice(this, 'q4')"><span class="choice-letter">C</span> Maison individuelle</button>
-                <button class="choice-btn single-choice" onclick="selectSingleChoice(this, 'q4')"><span class="choice-letter">D</span> Résidence secondaire</button>
+                <button class="choice-btn single-choice" onclick="trackTool('q4_a'); selectSingleChoice(this, 'q4')"><span class="choice-letter">A</span> Appartement -50m²</button>
+                <button class="choice-btn single-choice" onclick="trackTool('q4_b'); selectSingleChoice(this, 'q4')"><span class="choice-letter">B</span> Appartement + 50m²</button>
+                <button class="choice-btn single-choice" onclick="trackTool('q4_c'); selectSingleChoice(this, 'q4')"><span class="choice-letter">C</span> Maison individuelle</button>
+                <button class="choice-btn single-choice" onclick="trackTool('q4_d'); selectSingleChoice(this, 'q4')"><span class="choice-letter">D</span> Résidence secondaire</button>
             </div>
             
             <div class="actions-row">
-                <button class="btn-ok" onclick="navigate(1)">Ok</button>
+                <button class="btn-ok" onclick="trackTool('btn_q4_ok'); navigate(1)">Ok</button>
                 <div class="nav-arrows">
-                    <button class="nav-btn nav-btn-prev" onclick="navigate(-1)">&#8592;</button>
-                    <button class="nav-btn nav-btn-next" onclick="navigate(1)">&#8594;</button>
+                    <button class="nav-btn nav-btn-prev" onclick="trackTool('fleche_arriere'); navigate(-1)">&#8592;</button>
+                    <button class="nav-btn nav-btn-next" onclick="trackTool('fleche_avant'); navigate(1)">&#8594;</button>
                 </div>
             </div>
         </div>
@@ -358,16 +358,16 @@
         <div class="step" data-step="5">
             <h2 class="question-title"><span class="q-number">5.</span> Combien de personnes vivent dans votre foyer ?</h2>
             <div class="choices-container grid-1" id="q5">
-                <button class="choice-btn single-choice" onclick="selectSingleChoice(this, 'q5')"><span class="choice-letter">A</span> 1 personne</button>
-                <button class="choice-btn single-choice" onclick="selectSingleChoice(this, 'q5')"><span class="choice-letter">B</span> 2 personnes</button>
-                <button class="choice-btn single-choice" onclick="selectSingleChoice(this, 'q5')"><span class="choice-letter">C</span> 3 à 4 personnes</button>
-                <button class="choice-btn single-choice" onclick="selectSingleChoice(this, 'q5')"><span class="choice-letter">D</span> 5 personnes ou plus</button>
+                <button class="choice-btn single-choice" onclick="trackTool('q5_a'); selectSingleChoice(this, 'q5')"><span class="choice-letter">A</span> 1 personne</button>
+                <button class="choice-btn single-choice" onclick="trackTool('q5_b'); selectSingleChoice(this, 'q5')"><span class="choice-letter">B</span> 2 personnes</button>
+                <button class="choice-btn single-choice" onclick="trackTool('q5_c'); selectSingleChoice(this, 'q5')"><span class="choice-letter">C</span> 3 à 4 personnes</button>
+                <button class="choice-btn single-choice" onclick="trackTool('q5_d'); selectSingleChoice(this, 'q5')"><span class="choice-letter">D</span> 5 personnes ou plus</button>
             </div>
             
             <div class="actions-row" style="justify-content: flex-end;">
                 <div class="nav-arrows">
-                    <button class="nav-btn nav-btn-prev" onclick="navigate(-1)">&#8592;</button>
-                    <button class="nav-btn nav-btn-next" onclick="navigate(1)">&#8594;</button>
+                    <button class="nav-btn nav-btn-prev" onclick="trackTool('fleche_arriere'); navigate(-1)">&#8592;</button>
+                    <button class="nav-btn nav-btn-next" onclick="trackTool('fleche_avant'); navigate(1)">&#8594;</button>
                 </div>
             </div>
         </div>
@@ -375,7 +375,7 @@
         <div class="step final-screen" data-step="final">
             <h2 id="final-title">Titre dynamique</h2>
             <p id="final-desc">Description dynamique</p>
-            <a href="https://www.papernest.com/demarches-energie/fournisseurs/" target="_top" class="btn-ok" style="text-decoration: none; display: inline-block; text-align: center; box-sizing: border-box;">
+            <a href="https://www.papernest.com/demarches-energie/fournisseurs/" onclick="trackTool('btn_to_fournisseur')" target="_top" class="btn-ok" style="text-decoration: none; display: inline-block; text-align: center; box-sizing: border-box;">
                 Découvrir nos offres
             </a>
         </div>
@@ -588,6 +588,15 @@
 
         window.addEventListener('load', sendHeightToParent);
         mettreAJourBoutonsSuivant();
+
+        function trackTool(actionName) {
+            const nom_du_tool = "nom_du_tool";
+            window.parent.postMessage({
+              'event': 'tool_interaction',
+              'tool_name': nom_du_tool, 
+              'tool_action': actionName
+            }, '*');
+        }
     </script>
 </body>
 </html>
