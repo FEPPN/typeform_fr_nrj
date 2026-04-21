@@ -261,6 +261,9 @@
             margin-left: auto;
             margin-right: auto;
         }
+        .final-screen button {
+            margin: 5px;
+        }
         
         /* Ajustements pour mobiles */
         @media (max-width: 600px) {
@@ -321,6 +324,7 @@
                 <button class="choice-btn" onclick="toggleChoice(this)"><span class="choice-letter">A</span> Chauffage</button>
                 <button class="choice-btn" onclick="toggleChoice(this)"><span class="choice-letter">B</span> Eau chaude</button>
                 <button class="choice-btn" onclick="toggleChoice(this)"><span class="choice-letter">C</span> Cuisson</button>
+                <button class="choice-btn" onclick="toggleChoice(this)"><span class="choice-letter">D</span> Aucun</button>
             </div>
             
             <div class="actions-row">
@@ -396,6 +400,7 @@
             <h2 id="final-score-text">Votre consommation moyenne est de 0 kWh/an.</h2>
             <p>Les conseillers papernest vous accompagnent si vous souhaitez faire des économies sur votre facture.</p>
             <button class="btn-ok" onclick="location.reload()">Refaire une estimation</button>
+            <button class="btn-ok" id="redirection-btn" onclick="location.href = 'https://www.papernest.com/demarches-energie/'">Comparer les offres</button>
         </div>
 
     </div>
@@ -565,6 +570,9 @@
             document.querySelector(`.step[data-step="6"]`).classList.remove('active');
 
             document.getElementById('final-score-text').innerText = `Votre consommation moyenne est de ${score} kWh/an.`;
+            document.getElementById('redirection-btn').addEventListener("click",function(){
+                window.location.href = `https://www.papernest.com/demarches-energie/comparateur/?power_rating=6&contract_type=base&yearly_usage_in_kwh=${score}`;
+            });
             document.querySelector(`.step[data-step="final"]`).classList.add('active');
 
             document.querySelector('.progress-bar-container').style.display = 'none';
