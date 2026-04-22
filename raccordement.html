@@ -275,22 +275,22 @@
             <div class="question-desc">Locataire ou propriétaire ? Maison neuve ou ancienne ? ...</div>
             
             <div class="actions-row right-only">
-                <button class="btn-ok" onclick="navigateForward()">Commencer</button>
+                <button class="btn-ok" onclick="trackTool('btn_commencer'); navigateForward()">Commencer</button>
             </div>
         </div>
 
         <div class="step" data-step="2">
             <h2 class="question-title"><span class="q-number">1.</span> Vous êtes locataire ou propriétaire ?</h2>
             <div class="choices-container grid-1" id="q2">
-                <button class="choice-btn single-choice" onclick="selectChoice(this, 'q2')"><span class="choice-letter">A</span> Locataire</button>
-                <button class="choice-btn single-choice" onclick="selectChoice(this, 'q2')"><span class="choice-letter">B</span> Propriétaire</button>
+                <button class="choice-btn single-choice" onclick="trackTool('q2_a'); selectChoice(this, 'q2')"><span class="choice-letter">A</span> Locataire</button>
+                <button class="choice-btn single-choice" onclick="trackTool('q2_b'); selectChoice(this, 'q2')"><span class="choice-letter">B</span> Propriétaire</button>
             </div>
             
             <div class="actions-row">
-                <button class="btn-ok" onclick="navigateForward()">Ok</button>
+                <button class="btn-ok" onclick="trackTool('btn_q2_ok'); navigateForward()">Ok</button>
                 <div class="nav-arrows">
-                    <button class="nav-btn nav-btn-prev" onclick="navigateBackward()">&#8592;</button>
-                    <button class="nav-btn nav-btn-next" onclick="navigateForward()">&#8594;</button>
+                    <button class="nav-btn nav-btn-prev" onclick="trackTool('fleche_arriere'); navigateBackward()">&#8592;</button>
+                    <button class="nav-btn nav-btn-next" onclick="trackTool('fleche_avant'); navigateForward()">&#8594;</button>
                 </div>
             </div>
         </div>
@@ -298,15 +298,15 @@
         <div class="step" data-step="3">
             <h2 class="question-title"><span class="q-number">2.</span> Le logement dans lequel vous emménagez est-il neuf ou ancien ?</h2>
             <div class="choices-container grid-1" id="q3">
-                <button class="choice-btn single-choice" onclick="selectChoice(this, 'q3')"><span class="choice-letter">A</span> Logement neuf</button>
-                <button class="choice-btn single-choice" onclick="selectChoice(this, 'q3')"><span class="choice-letter">B</span> Logement ancien</button>
+                <button class="choice-btn single-choice" onclick="trackTool('q3_a'); selectChoice(this, 'q3')"><span class="choice-letter">A</span> Logement neuf</button>
+                <button class="choice-btn single-choice" onclick="trackTool('q3_b'); selectChoice(this, 'q3')"><span class="choice-letter">B</span> Logement ancien</button>
             </div>
             
             <div class="actions-row">
-                <button class="btn-ok" onclick="navigateForward()">Ok</button>
+                <button class="btn-ok" onclick="trackTool('btn_q3_ok'); navigateForward()">Ok</button>
                 <div class="nav-arrows">
-                    <button class="nav-btn nav-btn-prev" onclick="navigateBackward()">&#8592;</button>
-                    <button class="nav-btn nav-btn-next" onclick="navigateForward()">&#8594;</button>
+                    <button class="nav-btn nav-btn-prev" onclick="trackTool('fleche_arriere'); navigateBackward()">&#8592;</button>
+                    <button class="nav-btn nav-btn-next" onclick="trackTool('fleche_avant'); navigateForward()">&#8594;</button>
                 </div>
             </div>
         </div>
@@ -314,15 +314,15 @@
         <div class="step" data-step="4">
             <h2 class="question-title"><span class="q-number">3.</span> Quel type de mise en service souhaitez-vous ?</h2>
             <div class="choices-container grid-1" id="q4">
-                <button class="choice-btn single-choice" onclick="selectChoice(this, 'q4')"><span class="choice-letter">A</span> Mise en service standard (sous 10 jours ouvrés)</button>
-                <button class="choice-btn single-choice" onclick="selectChoice(this, 'q4')"><span class="choice-letter">B</span> Mise en service express (sous 5 jours ouvrés)</button>
+                <button class="choice-btn single-choice" onclick="trackTool('q4_a'); selectChoice(this, 'q4')"><span class="choice-letter">A</span> Mise en service standard (sous 10 jours ouvrés)</button>
+                <button class="choice-btn single-choice" onclick="trackTool('q4_b'); selectChoice(this, 'q4')"><span class="choice-letter">B</span> Mise en service express (sous 5 jours ouvrés)</button>
             </div>
             
             <div class="actions-row">
-                <button class="btn-ok" onclick="navigateForward()">Ok</button>
+                <button class="btn-ok" onclick="trackTool('btn_q4_ok'); navigateForward()">Ok</button>
                 <div class="nav-arrows">
-                    <button class="nav-btn nav-btn-prev" onclick="navigateBackward()">&#8592;</button>
-                    <button class="nav-btn nav-btn-next" onclick="navigateForward()">&#8594;</button>
+                    <button class="nav-btn nav-btn-prev" onclick="trackTool('fleche_arriere'); navigateBackward()">&#8592;</button>
+                    <button class="nav-btn nav-btn-next" onclick="trackTool('fleche_avant'); navigateForward()">&#8594;</button>
                 </div>
             </div>
         </div>
@@ -330,15 +330,15 @@
         <div class="step" data-step="5">
             <h2 class="question-title"><span class="q-number">3.</span> Quel type de compteur avez-vous ?</h2>
             <div class="choices-container grid-1" id="q5">
-                <button class="choice-btn single-choice" onclick="selectChoice(this, 'q5')"><span class="choice-letter">A</span> Compteur mécanique (ancienne génération)</button>
-                <button class="choice-btn single-choice" onclick="selectChoice(this, 'q5')"><span class="choice-letter">B</span> Compteur communicant Linky</button>
+                <button class="choice-btn single-choice" onclick="trackTool('q5_a'); selectChoice(this, 'q5')"><span class="choice-letter">A</span> Compteur mécanique (ancienne génération)</button>
+                <button class="choice-btn single-choice" onclick="trackTool('q5_b'); selectChoice(this, 'q5')"><span class="choice-letter">B</span> Compteur communicant Linky</button>
             </div>
             
             <div class="actions-row">
-                <button class="btn-ok" onclick="navigateForward()">Ok</button>
+                <button class="btn-ok" onclick="trackTool('btn_q5_ok'); navigateForward()">Ok</button>
                 <div class="nav-arrows">
-                    <button class="nav-btn nav-btn-prev" onclick="navigateBackward()">&#8592;</button>
-                    <button class="nav-btn nav-btn-next" onclick="navigateForward()">&#8594;</button>
+                    <button class="nav-btn nav-btn-prev" onclick="trackTool('fleche_arriere'); navigateBackward()">&#8592;</button>
+                    <button class="nav-btn nav-btn-next" onclick="trackTool('fleche_avant'); navigateForward()">&#8594;</button>
                 </div>
             </div>
         </div>
@@ -346,16 +346,16 @@
         <div class="step" data-step="6">
             <h2 class="question-title"><span class="q-number">4.</span> Quel type de mise en service souhaitez-vous ?</h2>
             <div class="choices-container grid-1" id="q6">
-                <button class="choice-btn single-choice" onclick="selectChoice(this, 'q6')"><span class="choice-letter">A</span> Mise en service standard (sous 5 jours ouvrés)</button>
-                <button class="choice-btn single-choice" onclick="selectChoice(this, 'q6')"><span class="choice-letter">B</span> Mise en service express (sous 2 jours ouvrés)</button>
-                <button class="choice-btn single-choice" onclick="selectChoice(this, 'q6')"><span class="choice-letter">C</span> Mise en service d'urgence (le jour même)</button>
+                <button class="choice-btn single-choice" onclick="trackTool('q6_a'); selectChoice(this, 'q6')"><span class="choice-letter">A</span> Mise en service standard (sous 5 jours ouvrés)</button>
+                <button class="choice-btn single-choice" onclick="trackTool('q6_b'); selectChoice(this, 'q6')"><span class="choice-letter">B</span> Mise en service express (sous 2 jours ouvrés)</button>
+                <button class="choice-btn single-choice" onclick="trackTool('q6_c'); selectChoice(this, 'q6')"><span class="choice-letter">C</span> Mise en service d'urgence (le jour même)</button>
             </div>
             
             <div class="actions-row">
-                <button class="btn-ok" onclick="navigateForward()">Ok</button>
+                <button class="btn-ok" onclick="trackTool('btn_q6_ok'); navigateForward()">Ok</button>
                 <div class="nav-arrows">
-                    <button class="nav-btn nav-btn-prev" onclick="navigateBackward()">&#8592;</button>
-                    <button class="nav-btn nav-btn-next" onclick="navigateForward()">&#8594;</button>
+                    <button class="nav-btn nav-btn-prev" onclick="trackTool('fleche_arriere'); navigateBackward()">&#8592;</button>
+                    <button class="nav-btn nav-btn-next" onclick="trackTool('fleche_avant'); navigateForward()">&#8594;</button>
                 </div>
             </div>
         </div>
@@ -363,15 +363,15 @@
         <div class="step" data-step="7">
             <h2 class="question-title"><span class="q-number">4.</span> Quel type de mise en service souhaitez-vous ?</h2>
             <div class="choices-container grid-1" id="q7">
-                <button class="choice-btn single-choice" onclick="selectChoice(this, 'q7')"><span class="choice-letter">A</span> Mise en service standard (sous 24h)</button>
-                <button class="choice-btn single-choice" onclick="selectChoice(this, 'q7')"><span class="choice-letter">B</span> Mise en service d'urgence (le jour même)</button>
+                <button class="choice-btn single-choice" onclick="trackTool('q7_a'); selectChoice(this, 'q7')"><span class="choice-letter">A</span> Mise en service standard (sous 24h)</button>
+                <button class="choice-btn single-choice" onclick="trackTool('q7_b');selectChoice(this, 'q7')"><span class="choice-letter">B</span> Mise en service d'urgence (le jour même)</button>
             </div>
             
             <div class="actions-row">
-                <button class="btn-ok" onclick="navigateForward()">Ok</button>
+                <button class="btn-ok" onclick="trackTool('btn_q7_ok'); navigateForward()">Ok</button>
                 <div class="nav-arrows">
-                    <button class="nav-btn nav-btn-prev" onclick="navigateBackward()">&#8592;</button>
-                    <button class="nav-btn nav-btn-next" onclick="navigateForward()">&#8594;</button>
+                    <button class="nav-btn nav-btn-prev" onclick="trackTool('fleche_arriere'); navigateBackward()">&#8592;</button>
+                    <button class="nav-btn nav-btn-next" onclick="trackTool('fleche_avant'); navigateForward()">&#8594;</button>
                 </div>
             </div>
         </div>
@@ -380,15 +380,15 @@
             <h2 class="question-title"><span class="q-number">2.</span> Votre logement est-il neuf ou ancien ?</h2>
             <div class="question-desc">On se place ici dans la situation où vous êtes propriétaire et que vous souhaitez mettre votre logement à la location.</div>
             <div class="choices-container grid-1" id="q8">
-                <button class="choice-btn single-choice" onclick="selectChoice(this, 'q8')"><span class="choice-letter">A</span> Logement neuf</button>
-                <button class="choice-btn single-choice" onclick="selectChoice(this, 'q8')"><span class="choice-letter">B</span> Logement ancien</button>
+                <button class="choice-btn single-choice" onclick="trackTool('q8_a'); selectChoice(this, 'q8')"><span class="choice-letter">A</span> Logement neuf</button>
+                <button class="choice-btn single-choice" onclick="trackTool('q8_b'); selectChoice(this, 'q8')"><span class="choice-letter">B</span> Logement ancien</button>
             </div>
             
             <div class="actions-row">
-                <button class="btn-ok" onclick="navigateForward()">Ok</button>
+                <button class="btn-ok" onclick="btn_trackTool('q8_ok'); navigateForward()">Ok</button>
                 <div class="nav-arrows">
-                    <button class="nav-btn nav-btn-prev" onclick="navigateBackward()">&#8592;</button>
-                    <button class="nav-btn nav-btn-next" onclick="navigateForward()">&#8594;</button>
+                    <button class="nav-btn nav-btn-prev" onclick="trackTool('fleche_arriere'); navigateBackward()">&#8592;</button>
+                    <button class="nav-btn nav-btn-next" onclick="trackTool('fleche_avant'); navigateForward()">&#8594;</button>
                 </div>
             </div>
         </div>
@@ -396,7 +396,7 @@
         <div class="step final-screen" data-step="final">
             <h2 id="final-title">Titre dynamique</h2>
             <p id="final-desc">Description dynamique</p>
-            <button class="btn-ok" onclick="location.reload()">Recommencer</button>
+            <button class="btn-ok" onclick="trackTool('btn_recommencer'); location.reload()">Recommencer</button>
         </div>
 
     </div>
@@ -637,6 +637,15 @@
             mettreAJourBoutonsSuivant();
         });
 
+        function trackTool(actionName) {
+            const nom_du_tool = "typeform_conso_elec";
+            window.parent.postMessage({
+              'event': 'tool_interaction',
+              'tool_name': nom_du_tool, 
+              'tool_action': actionName
+            }, '*');
+        }
+        
     </script>
 </body>
 </html>
