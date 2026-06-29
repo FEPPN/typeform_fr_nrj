@@ -299,13 +299,13 @@
         <div class="step" data-step="2">
             <h2 class="question-title"><span class="q-number">2.</span> Quels appareils possédez-vous ?</h2>
             <div class="choices-container grid-1" id="q2">
-                <button class="choice-btn" onclick="trackTool('q2_a'); toggleChoice(this)"><span class="choice-letter">A</span> Chauffe-eau électrique</button>
-                <button class="choice-btn" onclick="trackTool('q2_b'); toggleChoice(this)"><span class="choice-letter">B</span> Chauffage électrique</button>
-                <button class="choice-btn" onclick="trackTool('q2_c'); toggleChoice(this)"><span class="choice-letter">C</span> Machine à laver</button>
-                <button class="choice-btn" onclick="trackTool('q2_d'); toggleChoice(this)"><span class="choice-letter">D</span> Sèche-linge</button>
-                <button class="choice-btn" onclick="trackTool('q2_e'); toggleChoice(this)"><span class="choice-letter">E</span> Lave-vaisselle</button>
-                <button class="choice-btn" onclick="trackTool('q2_f'); toggleChoice(this)"><span class="choice-letter">F</span> Voiture électrique</button>
-                <button class="choice-btn" onclick="trackTool('q2_g'); toggleChoice(this)"><span class="choice-letter">G</span> Aucun</button>
+                <button class="choice-btn" onclick="trackTool('q2_a', { form_type: 'multiselect' }); toggleChoice(this)"><span class="choice-letter">A</span> Chauffe-eau électrique</button>
+                <button class="choice-btn" onclick="trackTool('q2_b', { form_type: 'multiselect' }); toggleChoice(this)"><span class="choice-letter">B</span> Chauffage électrique</button>
+                <button class="choice-btn" onclick="trackTool('q2_c', { form_type: 'multiselect' }); toggleChoice(this)"><span class="choice-letter">C</span> Machine à laver</button>
+                <button class="choice-btn" onclick="trackTool('q2_d', { form_type: 'multiselect' }); toggleChoice(this)"><span class="choice-letter">D</span> Sèche-linge</button>
+                <button class="choice-btn" onclick="trackTool('q2_e', { form_type: 'multiselect' }); toggleChoice(this)"><span class="choice-letter">E</span> Lave-vaisselle</button>
+                <button class="choice-btn" onclick="trackTool('q2_f', { form_type: 'multiselect' }); toggleChoice(this)"><span class="choice-letter">F</span> Voiture électrique</button>
+                <button class="choice-btn" onclick="trackTool('q2_g', { form_type: 'multiselect' }); toggleChoice(this)"><span class="choice-letter">G</span> Aucun</button>
             </div>
             
             <div class="actions-row">
@@ -320,12 +320,12 @@
         <div class="step" data-step="3">
             <h2 class="question-title"><span class="q-number">3.</span> Lesquels de vos appareils sont programmables ?</h2>
             <div class="choices-container grid-1" id="q3">
-                <button class="choice-btn" onclick="trackTool('q3_a'); toggleChoice(this)"><span class="choice-letter">A</span> Chauffe-eau électrique</button>
-                <button class="choice-btn" onclick="trackTool('q3_b'); toggleChoice(this)"><span class="choice-letter">B</span> Chauffage électrique</button>
-                <button class="choice-btn" onclick="trackTool('q3_c'); toggleChoice(this)"><span class="choice-letter">C</span> Machine à laver</button>
-                <button class="choice-btn" onclick="trackTool('q3_d'); toggleChoice(this)"><span class="choice-letter">D</span> Sèche-linge</button>
-                <button class="choice-btn" onclick="trackTool('q3_e'); toggleChoice(this)"><span class="choice-letter">E</span> Lave-vaisselle</button>
-                <button class="choice-btn" onclick="trackTool('q3_f'); toggleChoice(this)"><span class="choice-letter">F</span> Aucun appareil programmable</button>
+                <button class="choice-btn" onclick="trackTool('q3_a', { form_type: 'multiselect' }); toggleChoice(this)"><span class="choice-letter">A</span> Chauffe-eau électrique</button>
+                <button class="choice-btn" onclick="trackTool('q3_b', { form_type: 'multiselect' }); toggleChoice(this)"><span class="choice-letter">B</span> Chauffage électrique</button>
+                <button class="choice-btn" onclick="trackTool('q3_c', { form_type: 'multiselect' }); toggleChoice(this)"><span class="choice-letter">C</span> Machine à laver</button>
+                <button class="choice-btn" onclick="trackTool('q3_d', { form_type: 'multiselect' }); toggleChoice(this)"><span class="choice-letter">D</span> Sèche-linge</button>
+                <button class="choice-btn" onclick="trackTool('q3_e', { form_type: 'multiselect' }); toggleChoice(this)"><span class="choice-letter">E</span> Lave-vaisselle</button>
+                <button class="choice-btn" onclick="trackTool('q3_f', { form_type: 'multiselect' }); toggleChoice(this)"><span class="choice-letter">F</span> Aucun appareil programmable</button>
             </div>
             
             <div class="actions-row">
@@ -375,8 +375,8 @@
         <div class="step final-screen" data-step="final">
             <h2 id="final-title">Titre dynamique</h2>
             <p id="final-desc">Description dynamique</p>
-            <a href="https://www.papernest.com/demarches-energie/fournisseurs/" onclick="trackTool('btn_to_fournisseur')" target="_top" class="btn-ok" style="text-decoration: none; display: inline-block; text-align: center; box-sizing: border-box;">
-                Découvrir nos offres
+            <a href="https://www.papernest.com/demarches-energie/fournisseurs/" onclick="trackTool('click_cta_fournisseur', { is_cta: true })" target="_top" class="btn-ok" style="text-decoration: none; display: inline-block; text-align: center; box-sizing: border-box;">
+                Comparer les offres
             </a>
         </div>
 
@@ -583,20 +583,55 @@
             document.getElementById('final-desc').innerHTML = desc;
 
             document.querySelector('.final-screen').classList.add('active');
+            trackTool('view_result_parcours');
             sendHeightToParent();
         }
 
         window.addEventListener('load', sendHeightToParent);
         mettreAJourBoutonsSuivant();
 
-        function trackTool(actionName) {
-            const nom_du_tool = "nom_du_tool";
-            window.parent.postMessage({
-              'event': 'tool_interaction',
-              'tool_name': nom_du_tool, 
-              'tool_action': actionName
-            }, '*');
-        }
     </script>
+
+<script>
+    function trackTool(actionName, customParams = {}) {
+        const nom_du_tool = "tool_typeform_profilhphc";
+        let gtmEvent = "form";
+        if (actionName === "tool_visible") {
+            gtmEvent = "impression";
+        } else if (customParams.is_cta || (actionName && actionName.includes("click_cta"))) {
+            gtmEvent = "click_cta";
+        } else if (customParams.is_click || (actionName && actionName.includes("reset"))) {
+            gtmEvent = "click";
+        }
+
+        let eventCategory = "engagement";
+        let eventType = customParams.event_type || 'interaction';
+        if (actionName === "tool_visible" || (actionName && actionName.includes("view_result"))) {
+            eventType = "impression";
+        }
+
+        let payload = {
+            'event_system': 'papernest_tool',
+            'event': gtmEvent,
+            'event_component': nom_du_tool,
+            'event_category': eventCategory,
+            'event_type': eventType,
+            'event_position': 'content'
+        };
+
+        if (actionName && actionName !== "tool_visible") {
+            payload.event_step = actionName;
+        }
+
+        if (gtmEvent === "form") {
+            if (customParams.form_type === "none" || (actionName && (actionName.includes("view_result") || actionName.includes("tooltip")))) {
+                // Vide volontairement
+            } else {
+                payload.event_form_type = customParams.form_type || "select";
+            }
+        }
+        window.parent.postMessage(payload, '*');
+    }
+</script>
 </body>
 </html>
