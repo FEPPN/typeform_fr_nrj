@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ouverture d'un compteur EDF - Papernest</title>
+    <title>Ouverture d'un compteur - Papernest</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         /* --- CSS : Design adapté à l'identité visuelle Papernest --- */
@@ -184,7 +184,6 @@
         }
         .btn-ok:hover:not(:disabled) { background-color: var(--papernest-blue-hover); }
 
-        /* NOUVEAU : On grise le bouton Ok quand il est désactivé */
         .btn-ok:disabled {
             opacity: 0.6;
             cursor: not-allowed;
@@ -270,6 +269,7 @@
             <div class="progress-bar" id="progress-bar"></div>
         </div>
 
+        <!-- Etape 1 -->
         <div class="step active" data-step="1">
             <h2 class="question-title">Combien va vous coûter l'ouverture de votre compteur ?</h2>
             <div class="question-desc">Locataire ou propriétaire ? Maison neuve ou ancienne ?</div>
@@ -279,6 +279,7 @@
             </div>
         </div>
 
+        <!-- Etape 2 -->
         <div class="step" data-step="2">
             <h2 class="question-title"><span class="q-number">1.</span> Vous êtes locataire ou propriétaire ?</h2>
             <div class="choices-container grid-1" id="q2">
@@ -295,6 +296,7 @@
             </div>
         </div>
 
+        <!-- Etape 3 (Locataire) -->
         <div class="step" data-step="3">
             <h2 class="question-title"><span class="q-number">2.</span> Le logement dans lequel vous emménagez est-il neuf ou ancien ?</h2>
             <div class="choices-container grid-1" id="q3">
@@ -311,8 +313,9 @@
             </div>
         </div>
 
+        <!-- Etape 4 (Mise en service standard/express) -->
         <div class="step" data-step="4">
-            <h2 class="question-title"><span class="q-number">3.</span> Quel type de mise en service souhaitez-vous ?</h2>
+            <h2 class="question-title"><span class="q-number"></span> Quel type de mise en service souhaitez-vous ?</h2>
             <div class="choices-container grid-1" id="q4">
                 <button class="choice-btn single-choice" onclick="trackTool('q4_a'); selectChoice(this, 'q4')"><span class="choice-letter">A</span> Mise en service standard (sous 10 jours ouvrés)</button>
                 <button class="choice-btn single-choice" onclick="trackTool('q4_b'); selectChoice(this, 'q4')"><span class="choice-letter">B</span> Mise en service express (sous 5 jours ouvrés)</button>
@@ -327,8 +330,9 @@
             </div>
         </div>
 
+        <!-- Etape 5 (Type de compteur) -->
         <div class="step" data-step="5">
-            <h2 class="question-title"><span class="q-number">3.</span> Quel type de compteur avez-vous ?</h2>
+            <h2 class="question-title"><span class="q-number"></span> Quel type de compteur avez-vous ?</h2>
             <div class="choices-container grid-1" id="q5">
                 <button class="choice-btn single-choice" onclick="trackTool('q5_a'); selectChoice(this, 'q5')"><span class="choice-letter">A</span> Compteur mécanique (ancienne génération)</button>
                 <button class="choice-btn single-choice" onclick="trackTool('q5_b'); selectChoice(this, 'q5')"><span class="choice-letter">B</span> Compteur communicant Linky</button>
@@ -343,8 +347,9 @@
             </div>
         </div>
 
+        <!-- Etape 6 (Délais Compteur Mécanique) -->
         <div class="step" data-step="6">
-            <h2 class="question-title"><span class="q-number">4.</span> Quel type de mise en service souhaitez-vous ?</h2>
+            <h2 class="question-title"><span class="q-number"></span> Quel type de mise en service souhaitez-vous ?</h2>
             <div class="choices-container grid-1" id="q6">
                 <button class="choice-btn single-choice" onclick="trackTool('q6_a'); selectChoice(this, 'q6')"><span class="choice-letter">A</span> Mise en service standard (sous 5 jours ouvrés)</button>
                 <button class="choice-btn single-choice" onclick="trackTool('q6_b'); selectChoice(this, 'q6')"><span class="choice-letter">B</span> Mise en service express (sous 2 jours ouvrés)</button>
@@ -360,8 +365,9 @@
             </div>
         </div>
 
+        <!-- Etape 7 (Délais Linky) -->
         <div class="step" data-step="7">
-            <h2 class="question-title"><span class="q-number">4.</span> Quel type de mise en service souhaitez-vous ?</h2>
+            <h2 class="question-title"><span class="q-number"></span> Quel type de mise en service souhaitez-vous ?</h2>
             <div class="choices-container grid-1" id="q7">
                 <button class="choice-btn single-choice" onclick="trackTool('q7_a'); selectChoice(this, 'q7')"><span class="choice-letter">A</span> Mise en service standard (sous 24h)</button>
                 <button class="choice-btn single-choice" onclick="trackTool('q7_b');selectChoice(this, 'q7')"><span class="choice-letter">B</span> Mise en service d'urgence (le jour même)</button>
@@ -376,16 +382,16 @@
             </div>
         </div>
 
+        <!-- Etape 8 (Propriétaire - Neuf ou Ancien) -->
         <div class="step" data-step="8">
-            <h2 class="question-title"><span class="q-number">2.</span> Votre logement est-il neuf ou ancien ?</h2>
-            <div class="question-desc">On se place ici dans la situation où vous êtes propriétaire et que vous souhaitez mettre votre logement à la location.</div>
+            <h2 class="question-title"><span class="q-number">2.</span> Le logement dont vous êtes propriétaire est-il neuf ou ancien ?</h2>
             <div class="choices-container grid-1" id="q8">
                 <button class="choice-btn single-choice" onclick="trackTool('q8_a'); selectChoice(this, 'q8')"><span class="choice-letter">A</span> Logement neuf</button>
                 <button class="choice-btn single-choice" onclick="trackTool('q8_b'); selectChoice(this, 'q8')"><span class="choice-letter">B</span> Logement ancien</button>
             </div>
             
             <div class="actions-row">
-                <button class="btn-ok" onclick="btn_trackTool('q8_ok'); navigateForward()">Ok</button>
+                <button class="btn-ok" onclick="trackTool('btn_q8_ok'); navigateForward()">Ok</button>
                 <div class="nav-arrows">
                     <button class="nav-btn nav-btn-prev" onclick="trackTool('fleche_arriere'); navigateBackward()">&#8592;</button>
                     <button class="nav-btn nav-btn-next" onclick="trackTool('fleche_avant'); navigateForward()">&#8594;</button>
@@ -393,6 +399,24 @@
             </div>
         </div>
 
+        <!-- Etape 9 (Propriétaire - Habiter ou Louer) -->
+        <div class="step" data-step="9">
+            <h2 class="question-title"><span class="q-number">3.</span> Souhaitez-vous y habiter ou le mettre en location ?</h2>
+            <div class="choices-container grid-1" id="q9">
+                <button class="choice-btn single-choice" onclick="trackTool('q9_a'); selectChoice(this, 'q9')"><span class="choice-letter">A</span> J'y habite</button>
+                <button class="choice-btn single-choice" onclick="trackTool('q9_b'); selectChoice(this, 'q9')"><span class="choice-letter">B</span> Je le mets en location</button>
+            </div>
+            
+            <div class="actions-row">
+                <button class="btn-ok" onclick="trackTool('btn_q9_ok'); navigateForward()">Ok</button>
+                <div class="nav-arrows">
+                    <button class="nav-btn nav-btn-prev" onclick="trackTool('fleche_arriere'); navigateBackward()">&#8592;</button>
+                    <button class="nav-btn nav-btn-next" onclick="trackTool('fleche_avant'); navigateForward()">&#8594;</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Écran Final -->
         <div class="step final-screen" data-step="final">
             <h2 id="final-title">Titre dynamique</h2>
             <p id="final-desc">Description dynamique</p>
@@ -415,24 +439,21 @@
             }, 50); 
         }
 
-        // NOUVEAU : Vérifie si la question actuelle a une réponse
         function validerEtapeActuelle() {
             const etapeActuelle = document.querySelector('.step.active');
             if (!etapeActuelle) return true;
 
             const conteneurChoix = etapeActuelle.querySelector('.choices-container');
-            // S'il y a des choix à faire, on vérifie qu'au moins 1 est sélectionné
             if (conteneurChoix) {
                 const choixSelectionnes = conteneurChoix.querySelectorAll('.choice-btn.selected');
                 if (choixSelectionnes.length === 0) {
-                    return false; // Bloque si rien n'est sélectionné
+                    return false; 
                 }
             }
 
-            return true; // S'il n'y a pas de choix (ex: écran d'accueil), c'est valide
+            return true; 
         }
 
-        // NOUVEAU : Grise ou active les boutons suivant la validité
         function mettreAJourBoutonsSuivant() {
             const etapeActuelle = document.querySelector('.step.active');
             if (!etapeActuelle) return;
@@ -457,7 +478,7 @@
             buttons.forEach(btn => btn.classList.remove('selected'));
             button.classList.add('selected');
             
-            mettreAJourBoutonsSuivant(); // NOUVEAU : Met à jour les boutons instantanément
+            mettreAJourBoutonsSuivant(); 
 
             setTimeout(() => { navigateForward(); }, 300); 
         }
@@ -516,15 +537,30 @@
             if (currentStep === 8) {
                 let val = getSelectedValue('q8');
                 if (!val) return null;
-                if (val === 'Logement neuf') return 'ty8';
-                if (val === 'Logement ancien') return 'ty9';
+                return 9; // Redirige vers la question "Habiter ou louer"
+            }
+
+            if (currentStep === 9) {
+                let valUsage = getSelectedValue('q9');
+                let typeLogement = getSelectedValue('q8');
+                
+                if (!valUsage || !typeLogement) return null;
+                
+                if (valUsage === "Je le mets en location") {
+                    if (typeLogement === "Logement neuf") return 'ty8';
+                    if (typeLogement === "Logement ancien") return 'ty9';
+                }
+                
+                if (valUsage === "J'y habite") {
+                    if (typeLogement === "Logement neuf") return 4; // Raccordement neuf (délais)
+                    if (typeLogement === "Logement ancien") return 5; // Choix du compteur
+                }
             }
             
             return null;
         }
 
         function navigateForward() {
-            // NOUVEAU : On empêche l'avancée si la question n'est pas validée
             if (!validerEtapeActuelle()) {
                 return;
             }
@@ -566,14 +602,13 @@
             
             sendHeightToParent();
             
-            // NOUVEAU : On grise immédiatement les boutons à l'arrivée sur la nouvelle page
             mettreAJourBoutonsSuivant();
         }
 
         const thankYouScreens = {
             'ty1': {
                 title: "Votre mise en service est estimée à 29,10 €.",
-                desc: "Les frais de mise en service de compteur seront ajoutés à ta première facture d'électricité."
+                desc: "Les frais de mise en service de compteur seront ajoutés à votre première facture d'électricité."
             },
             'ty2': {
                 title: "Votre mise en service est estimée à 73,25 €",
@@ -601,7 +636,7 @@
             },
             'ty8': {
                 title: "Si votre logement est neuf et que vous souhaitez le mettre à la location, vous devez vous assurer que le raccordement au réseau a bien été fait. Vous devez faire la demande de raccordement auprès d'Enedis et vous charger des frais.",
-                desc: "Par contre, les frais de mise en service du compteur sont à la charge de vos futurs locataires."
+                desc: "Par contre, les frais de mise en service du compteur sont à la charge de vos futurs locataires. Ce sont eux qui devront en faire la demande."
             },
             'ty9': {
                 title: "Si votre logement est ancien et que vous souhaitez le mettre à la location, vous n'avez aucun frais à votre charge concernant l'ouverture du compteur. C'est à vos locataires de s'en charger.",
@@ -633,7 +668,6 @@
         
         window.addEventListener('load', () => {
             sendHeightToParent();
-            // NOUVEAU : On force la vérification initiale au chargement (pas d'impact sur l'accueil, mais utile par sécurité)
             mettreAJourBoutonsSuivant();
         });
 
