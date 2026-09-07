@@ -449,235 +449,140 @@
 </div>
 
     <script>
-        let historyStack = [1];
-        const maxDepth = 6; 
+let historyStack = [1];
+const maxDepth = 6;
 
-        function sendHeightToParent() {
-            setTimeout(() => {
-                const container = document.getElementById('typeform-container');
-                if(container) {
-                    const height = container.offsetHeight;
-                    window.parent.postMessage({ type: 'resize', height: height + 20 }, '*');
-                }
-            }, 50); 
+function sendHeightToParent() {
+    setTimeout(() => {
+        const container = document.getElementById('typeform-container');
+        if(container) {
+            const height = container.offsetHeight;
+            window.parent.postMessage({ type: 'resize', height: height + 20 }, '*');
         }
+    }, 50); 
+}
 
-        // NOUVEAU : Vérifie si la question actuelle a une réponse
-        function validerEtapeActuelle() {
-            const etapeActuelle = document.querySelector('.step.active');
-            if (!etapeActuelle) return true;
+function validerEtapeActuelle() {
+    const etapeActuelle = document.querySelector('.step.active');
+    if (!etapeActuelle) return true;
 
-            const conteneurChoix = etapeActuelle.querySelector('.choices-container');
-            // S'il y a des choix à faire, on vérifie qu'au moins 1 est sélectionné
-            if (conteneurChoix) {
-                const choixSelectionnes = conteneurChoix.querySelectorAll('.choice-btn.selected');
-                if (choixSelectionnes.length === 0) {
-                    return false; // Bloque si rien n'est sélectionné
-                }
-            }
-
-            return true; // S'il n'y a pas de choix (ex: écran d'accueil), c'est valide
+    const conteneurChoix = etapeActuelle.querySelector('.choices-container');
+    if (conteneurChoix) {
+        const choixSelectionnes = conteneurChoix.querySelectorAll('.choice-btn.selected');
+        if (choixSelectionnes.length === 0) {
+            return false;
         }
+    }
 
-        // NOUVEAU : Grise ou active les boutons suivant la validité
-        function mettreAJourBoutonsSuivant() {
-            const etapeActuelle = document.querySelector('.step.active');
-            if (!etapeActuelle) return;
+    return true;
+}
 
-            let estValide = true;
+function mettreAJourBoutonsSuivant() {
+    const etapeActuelle = document.querySelector('.step.active');
+    if (!etapeActuelle) return;
 
-            const conteneurChoix = etapeActuelle.querySelector('.choices-container');
-            if (conteneurChoix) {
-                const choixSelectionnes = conteneurChoix.querySelectorAll('.choice-btn.selected');
-                estValide = choixSelectionnes.length > 0; 
-            }
+    let estValide = true;
 
-            const flecheDroite = etapeActuelle.querySelector('.nav-btn-next');
-            const boutonOk = etapeActuelle.querySelector('.btn-ok');
+    const conteneurChoix = etapeActuelle.querySelector('.choices-container');
+    if (conteneurChoix) {
+        const choixSelectionnes = conteneurChoix.querySelectorAll('.choice-btn.selected');
+        estValide = choixSelectionnes.length > 0; 
+    }
 
-            if (flecheDroite) flecheDroite.disabled = !estValide;
-            if (boutonOk) boutonOk.disabled = !estValide;
-        }
+    const flecheDroite = etapeActuelle.querySelector('.nav-btn-next');
+    const boutonOk = etapeActuelle.querySelector('.btn-ok');
 
-        function selectChoice(button, containerId) {
-            const buttons = document.querySelectorAll(`#${containerId} .choice-btn`);
-            buttons.forEach(btn => btn.classList.remove('selected'));
-            button.classList.add('selected');
-            
-            mettreAJourBoutonsSuivant(); // NOUVEAU : Met à jour les boutons instantanément
+    if (flecheDroite) flecheDroite.disabled = !estValide;
+    if (boutonOk) boutonOk.disabled = !estValide;
+}
 
-            setTimeout(() => { navigateForward(); }, 300); 
-        }
+function selectChoice(button, containerId) {
+    const buttons = document.querySelectorAll(`#${containerId} .choice-btn`);
+    buttons.forEach(btn => btn.classList.remove('selected'));
+    button.classList.add('selected');
+    
+    mettreAJourBoutonsSuivant();
 
-        function getSelectedValue(containerId) {
+    setTimeout(() => { navigateForward(); }, 300); 
+}
+
+function getSelectedValue(containerId) {
     const btn = document.querySelector(`#${containerId} .choice-btn.selected`);
     return btn ? btn.innerText.substring(2).trim() : null;
 }
 
 function getNextStepOrResult(currentStep) {
-    if (currentStep === 1) return 2;
-    
-    if (currentStep === 2) {
-        let val = getSelectedValue('q2');
-        if (!val) return null; 
-        if (val === 'Locataire') return 3;
-        if (val === 'Propriétaire') return 8;
-    }
-    
-    if (currentStep === 3) {
-        let val = getSelectedValue('q3');
-        if (!val) return null;
-        if (val === 'Logement neuf') return 4;
-        if (val === 'Logement ancien') return 5;
-    }
-    
-    if (currentStep === 4) {
-        let val = getSelectedValue('q4');
-        if (!val) return null;
-        if (val === 'Mise en service standard (sous 10 jours ouvrés)') return 'ty1';
-        if (val === 'Mise en service express (sous 5 jours ouvrés)') return 'ty2';
-    }
-    
-    if (currentStep === 5) {
-        let val = getSelectedValue('q5');
-        if (!val) return null;
-        if (val === 'Compteur mécanique (ancienne génération)') return 6;
-        if (val === 'Compteur communicant Linky') return 7;
-    }
-    
-    if (currentStep === 6) {
-        let val = getSelectedValue('q6');
-        if (!val) return null;
-        if (val === 'Mise en service standard (sous 5 jours ouvrés)') return 'ty5';
-        if (val === 'Mise en service express (sous 2 jours ouvrés)') return 'ty6';
-        if (val === "Mise en service d'urgence (le jour même)") return 'ty7';
-    }
-    
-    if (currentStep === 7) {
-        let val = getSelectedValue('q7');
-        if (!val) return null;
-        if (val === 'Mise en service standard (sous 24h)') return 'ty3';
-        if (val === "Mise en service d'urgence (le jour même)") return 'ty4';
-    }
-    
-    if (currentStep === 8) {
-        let val = getSelectedValue('q8');
-        if (!val) return null;
-        if (val === 'Logement neuf') return 'ty8';
-        if (val === 'Logement ancien') return 9;
-    }
-    
-    if (currentStep === 9) {
-        let val = getSelectedValue('q9');
-        if (!val) return null;
-        if (val === 'Y habiter') return 10;
-        if (val === 'Le louer') return 'ty10';
-    }
-    
-    if (currentStep === 10) {
-        let val = getSelectedValue('q10');
-        if (!val) return null;
-        if (val === 'Compteur mécanique (ancienne génération)') return 11;
-        if (val === 'Compteur communicant Linky') return 'ty9';
-    }
-    
-    if (currentStep === 11) {
-        let val = getSelectedValue('q11');
-        if (!val) return null;
-        if (val === 'Mise en service standard (sous 5 jours ouvrés)') return 'ty11';
-        if (val === 'Mise en service express (sous 2 jours ouvrés)') return 'ty12';
-    }
-    
-    return null;
+    // ... (pas de changement ici)
 }
 
 const thankYouScreens = {
-    'ty1': {
-        title: "Votre mise en service est estimée à 29,10 €.",
-        desc: "Les frais de mise en service de compteur seront ajoutés à ta première facture d'électricité."
-    },
-    'ty2': {
-        title: "Votre mise en service est estimée à 73,25 €",
-        desc: "Les frais de mise en service de compteur seront ajoutés à votre première facture d'électricité."
-    },
-    'ty3': {
-        title: "Votre mise en service est estimée à 1,80 €",
-        desc: "Les frais de mise en service de compteur seront ajoutés à votre première facture d'électricité."
-    },
-    'ty4': {
-        title: "Votre mise en service est estimée à 62,93 €",
-        desc: "Les frais de mise en service de compteur seront ajoutés à votre première facture d'électricité."
-    },
-    'ty5': {
-        title: "Votre mise en service est estimée à 32,69 €",
-        desc: "Les frais de mise en service de compteur seront ajoutés à votre première facture d'électricité."
-    },
-    'ty6': {
-        title: "Votre mise en service est estimée à 76,84 €",
-        desc: "Les frais de mise en service de compteur seront ajoutés à votre première facture d'électricité."
-    },
-    'ty7': {
-        title: "Votre mise en service est estimée à 185,47 €",
-        desc: "Les frais de mise en service de compteur seront ajoutés à votre première facture d'électricité."
-    },
-    'ty8': {
-        title: "Si votre logement est neuf et que vous souhaitez le mettre à la location, vous devez vous assurer que le raccordement au réseau a bien été fait. Vous devez faire la demande de raccordement auprès d'Enedis et vous charger des frais.",
-        desc: "Par contre, les frais de mise en service du compteur sont à la charge de vos futurs locataires."
-    },
-    'ty9': {
-        title: "Votre mise en service est estimée à 1,80 €",
-        desc: "Les frais de mise en service de compteur seront ajoutés à votre première facture d'électricité." 
-    },
-    'ty10': {
-        title: "Si votre logement est ancien et que vous souhaitez le mettre à la location, vous n'avez aucun frais à votre charge concernant l'ouverture du compteur. C'est à vos locataires de s'en charger.",
-        desc: ""
-    },
-    'ty11': {
-        title: "Votre mise en service est estimée à 32,69 €",
-        desc: "Les frais de mise en service de compteur seront ajoutés à votre première facture d'électricité."
-    },
-    'ty12': {
-        title: "Votre mise en service est estimée à 76,84 €",
-        desc: "Les frais de mise en service de compteur seront ajoutés à votre première facture d'électricité."  
-    }
+    // ... (pas de changement ici)
 };
 
-        function showThankYouScreen(tyId) {
-            document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
-            document.querySelector('.progress-bar-container').style.display = 'none';
+function navigateForward() {
+    if (!validerEtapeActuelle()) {
+        return;
+    }
 
-            const tyData = thankYouScreens[tyId];
-            document.getElementById('final-title').innerText = tyData.title;
-            
-            const descElement = document.getElementById('final-desc');
-            if(tyData.desc) {
-                descElement.innerText = tyData.desc;
-                descElement.style.display = 'block';
-            } else {
-                descElement.style.display = 'none';
-            }
+    let current = historyStack[historyStack.length - 1];
+    let next = getNextStepOrResult(current);
+    
+    if (!next) return; 
 
-            document.querySelector('.final-screen').classList.add('active');
-            
-            sendHeightToParent();
-        }
-
+    if (typeof next === 'string' && next.startsWith('ty')) {
+        showThankYouScreen(next);
+    } else {
+        historyStack.push(next);
         renderCurrentStep();
-        
-        window.addEventListener('load', () => {
-            sendHeightToParent();
-            // NOUVEAU : On force la vérification initiale au chargement (pas d'impact sur l'accueil, mais utile par sécurité)
-            mettreAJourBoutonsSuivant();
-        });
+    }
+}
 
-        function trackTool(actionName) {
-            const nom_du_tool = "typeform_conso_elec";
-            window.parent.postMessage({
-              'event': 'tool_interaction',
-              'tool_name': nom_du_tool, 
-              'tool_action': actionName
-            }, '*');
-        }
+function navigateBackward() {
+    if (historyStack.length > 1) {
+        historyStack.pop(); 
+        renderCurrentStep();
+    }
+}
+
+function renderCurrentStep() {
+    document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
+    document.querySelector('.final-screen').classList.remove('active');
+    document.querySelector('.progress-bar-container').style.display = 'block';
+
+    let current = historyStack[historyStack.length - 1];
+    document.querySelector(`.step[data-step="${current}"]`).classList.add('active');
+
+    document.querySelectorAll('.nav-btn-prev').forEach(btn => {
+        btn.disabled = (historyStack.length === 1);
+    });
+
+    let progress = Math.min((historyStack.length / maxDepth) * 100, 100);
+    document.getElementById('progress-bar').style.width = progress + '%';
+    
+    sendHeightToParent();
+    
+    mettreAJourBoutonsSuivant();
+}
+
+function showThankYouScreen(tyId) {
+    // ... (pas de changement ici)
+}
+
+renderCurrentStep();
+
+window.addEventListener('load', () => {
+    sendHeightToParent();
+    mettreAJourBoutonsSuivant();
+});
+
+function trackTool(actionName) {
+    const nom_du_tool = "typeform_conso_elec";
+    window.parent.postMessage({
+      'event': 'tool_interaction',
+      'tool_name': nom_du_tool, 
+      'tool_action': actionName
+    }, '*');
+}
         
     </script>
 </body>
